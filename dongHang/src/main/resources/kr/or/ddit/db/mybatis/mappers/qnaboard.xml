@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.ddit.common.board.qnaboard.dao.IQnaboardDAO">
-	
+	<sql id="searchFrag">
+			<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchWord)">
+				<if test="searchType.equals('writer')">
+					AND B.PERSON_NAME LIKE '%'||#{searchWord}||'%'
+				</if>
+				<if test="searchType.equals('title')">
+					AND A.QNABOARD_TITLE LIKE '%'||#{searchWord}||'%'
+				</if>
+			</if>	
+	</sql>
 	<select id="selectTotalRecord" parameterType="pagingVO" resultType="long">
-		SELECT NVL(COUNT(*),0) FROM QNABOARD
+		SELECT NVL(COUNT(*),0) 
+		FROM QNABOARD A, PERSON B
+        WHERE A.MEM_ID = B.PERSON_ID
+		<include refid="searchFrag" />
 	</select>
 	<select id="selectQnaboardList" parameterType="pagingVO" resultMap="qnaboardMap">
 		SELECT B.*
@@ -19,6 +31,7 @@
 				    B.PERSON_NAME
 				FROM QNABOARD A, PERSON B
                 WHERE A.MEM_ID = B.PERSON_ID
+                <include refid="searchFrag" />
 				ORDER BY QNABOARD_NO DESC
 				) A ) B
 		 WHERE RNUM BETWEEN #{startRow} AND #{endRow}

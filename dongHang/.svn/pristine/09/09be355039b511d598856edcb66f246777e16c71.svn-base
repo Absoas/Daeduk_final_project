@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+<!-- 	definiation name == 논리적인 view name -->
+  <definition name="parent" template="/WEB-INF/views/template.jsp">
+  	<put-attribute name="preScript" value="/includee/main/preScript.jsp" />
+    <put-attribute name="title" value="동행" />
+    <put-attribute name="header" value="/includee/main/header.jsp" />
+    <put-attribute name="footer" value="/includee/main/footer.jsp" />
+  </definition>
+  
+  <definition name="common/board/customerCenter/*" extends="parent">
+    <put-attribute name="body" value="/WEB-INF/views/common/board/customerCenter/{1}.jsp" />
+  </definition>
+  
+  <definition name="common/board/eventboard/*" extends="parent">
+    <put-attribute name="body" value="/WEB-INF/views/common/board/eventboard/{1}.jsp" />
+  </definition>
+  
+  <definition name="common/board/postboard/*" extends="parent">
+    <put-attribute name="body" value="/WEB-INF/views/common/board/postboard/{1}.jsp" />
+  </definition>
+  
+  <definition name="common/board/tipboard/*" extends="parent">
+    <put-attribute name="body" value="/WEB-INF/views/common/board/tipboard/{1}.jsp" />
+  </definition>
+  
+  <definition name="common/board/freeboard/*" extends="parent">
+    <put-attribute name="body" value="/WEB-INF/views/common/board/freeboard/{1}.jsp" />
+  </definition>
+  
+  <definition name="common/board/noticeboard/*" extends="parent">
+    <put-attribute name="body" value="/WEB-INF/views/common/board/noticeboard/{1}.jsp" />
+  </definition>
+  
+  <definition name="member/mypage/*" extends="parent">
+    <put-attribute name="body" value="/WEB-INF/views/member/mypage/{1}.jsp" />
+  </definition>
+  
+  
+</tiles-definitions>

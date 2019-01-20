@@ -1,0 +1,61 @@
+package kr.or.ddit.api.controller;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+
+@Controller
+public class GetAirPlaneInfo {
+	
+	@ResponseBody
+	@RequestMapping(value = "airLine/air.do", method = RequestMethod.POST , produces ="application/json;charset=UTF-8")
+	public String doAirLineGet(
+			String searchType           ,
+			String airline              ,
+			String domestic_round_way   ,
+			String domestic_start       ,
+			String domestic_end         ,
+			String domestic_startDate   ,
+			String domestic_endDate     ,
+			String domestic_ea_adult    ,
+			String domestic_ea_children ,
+			String domestic_ea_infant   ,
+			String domestic_seat        ,
+			String domestic_airline 
+			
+	) throws IOException {
+	
+		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
+		params.add("searchType", searchType);
+		params.add("airline", airline);
+		params.add("domestic_round_way", domestic_round_way);
+		params.add("domestic_start", domestic_start);
+		params.add("domestic_end", domestic_end);
+		params.add("domestic_startDate", domestic_startDate);
+		params.add("domestic_endDate", domestic_endDate);
+		params.add("domestic_ea_adult", domestic_ea_adult);
+		params.add("domestic_ea_children", domestic_ea_children);
+		params.add("domestic_ea_infant", domestic_ea_infant);
+		params.add("domestic_seat", domestic_seat);
+		params.add("domestic_airline", domestic_airline);
+//		params.add("airport", "GMP");
+//		params.add("line", "dome2");
+		
+		
+		String url = "https://www.airport.co.kr/extra/ticket/webtourDomestic/layOut.do";
+		
+		RestTemplate template = new RestTemplate();
+		ResponseEntity<String> response = template.postForEntity( url, params, String.class );
+		
+		return response.getBody();
+	}
+}

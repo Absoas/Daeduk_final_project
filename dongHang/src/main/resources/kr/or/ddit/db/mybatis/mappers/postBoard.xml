@@ -32,6 +32,11 @@
 		FROM REVIEW
 		<include refid="searchFrag" />
 	</select>
+	<select id="selectPerson" parameterType="String" resultType="personVO">
+		SELECT *
+		FROM PERSON
+		WHERE PERSON_ID = #{mem_id}
+	</select>
 	
 	<resultMap type="reviewVO" id="boardMap" autoMapping="true">
 		<id property="review_no" column="REVIEW_NO"/>
@@ -44,13 +49,14 @@
 		    SELECT ROWNUM RNUM, A.*
 		    FROM (
 		        SELECT r.REVIEW_NO, 
-		        		r.REVIEW_TITLE, 
-		        		p.PERSON_NAME, r.REVIEW_DATE, 
+		        		r.REVIEW_TITLE,
+		        		p.PERSON_NAME,p.PERSON_ID,	 r.REVIEW_DATE, 
 		                r.REVIEW_VIEW_COUNT, r.REVIEW_RECOMMEND_COUNT
 		        FROM REVIEW r,PERSON p,MEMBER m
 		        WHERE r.REVIEW_MEM_ID = m.MEM_ID
 				AND m.MEM_ID = p.PERSON_ID
 		        <include refid="searchFrag2" />
+		        ORDER BY REVIEW_NO DESC
 		    ) A ) B
 		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
 		
@@ -75,20 +81,43 @@
 		REVIEW_VIEW_COUNT = REVIEW_VIEW_COUNT + 1
 		WHERE REVIEW_NO = #{review_no}
 	</update>
-<!-- 	<resultMap type="reviewVO" id="reviewMap" autoMapping="true"> -->
-<!-- 		<id property="review_no" column="REVIEW_NO"/> -->
-		
-<!-- 		<collection property="pdsList" ofType="pdsVO" autoMapping="true" /> -->
-<!-- 	</resultMap> -->
-<!-- 	<select id="selectBoard" parameterType="long" resultMap="reviewMap"> -->
-<!-- 		SELECT BOARD.BO_NO BOARD_NO, BO_WRITER, BO_IP, BO_MAIL, BO_TITLE, BO_CONTENT, -->
-<!-- 			BO_DATE, BO_HIT, BO_RCMD, BO_PASS  -->
-<!-- 			, PDS_NO, PDS_SAVENAME, PDS_FILENAME, PDS_SIZE, PDS_FANCYSIZE -->
-<!-- 			, PDS_MIME -->
-<!-- 		FROM BOARD LEFT OUTER JOIN PDS ON (BOARD.BO_NO = PDS.BO_NO) -->
-<!-- 		WHERE BOARD.BO_NO = #{bo_no} -->
-<!-- 	</select> -->
+	<update id="incrementRcmd" parameterType="long">
+		UPDATE REVIEW
+		SET
+		REVIEW_RECOMMEND_COUNT = REVIEW_RECOMMEND_COUNT + 1
+		WHERE REVIEW_NO = #{review_no}
+	</update>
 	
+	<update id="updateBoard" parameterType="reviewVO">
+		UPDATE REVIEW
+		   <set>
+			<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(review_title)"> 
+			   REVIEW_TITLE		=	#{review_title},
+			</if>
+			<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(review_content)"> 
+		   	   REVIEW_CONTENT	=	#{review_content}
+		    </if>
+		   </set>
+		WHERE REVIEW_NO =#{review_no}
+	</update>
+	
+	<insert id="insertBoard" parameterType="reviewVO">
+		<selectKey resultType="long" keyProperty="review_no" order="BEFORE">
+			SELECT REVIEW_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO REVIEW (
+		    REVIEW_NO,    REVIEW_MEM_ID, REVIEW_TITLE,
+		    REVIEW_CONTENT,    REVIEW_DATE
+		    
+		) VALUES (
+			#{review_no},    #{review_mem_id}, #{review_title},
+		    #{review_content},    SYSDATE
+		    
+		)
+	</insert>
+	<delete id="deleteBoard" parameterType="long">
+		DELETE FROM REVIEW WHERE REVIEW_NO = #{review_no}
+	</delete>
 	
 	
 </mapper>

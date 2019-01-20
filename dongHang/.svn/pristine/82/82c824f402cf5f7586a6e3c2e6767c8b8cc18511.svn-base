@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.member.mySchedule.dao.IMyScheduleDAO">
+	<select id="selectMyScheduleList" resultType="myScheduleVO">
+		SELECT
+		    MYSCHEDULE_NO,
+		    MYSCHEDULE_TITLE,
+		    MYSCHEDULE_CONTENT,
+		    MYSCHEDULE_DATE,
+		    MEM_ID
+		FROM
+		    MYSCHEDULE
+	</select>
+	<select id="selectMySchedule" parameterType="long" resultType="myScheduleVO">
+		SELECT
+		    MYSCHEDULE_NO,
+		    MYSCHEDULE_TITLE,
+		    MYSCHEDULE_CONTENT,
+		    MYSCHEDULE_DATE,
+		    MEM_ID
+		FROM
+		    MYSCHEDULE_NO= #{myschedule_no}
+	</select>
+	<insert id="insertMySchedule" parameterType="myScheduleVO">
+		<selectKey resultType="long" keyProperty="myschedule_no" order="BEFORE">
+			SELECT MYSCHEDULE_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO MYSCHEDULE (
+		    MYSCHEDULE_NO,
+		    MYSCHEDULE_TITLE,
+		    MYSCHEDULE_CONTENT,
+		    MYSCHEDULE_DATE,
+		    MEM_ID
+		) VALUES (
+		    #{myschedule_no}, #{myschedule_title},
+		    #{myschedule_content}, #{myschedule_date},
+		    #{mem_id}
+		)
+	</insert>
+</mapper>

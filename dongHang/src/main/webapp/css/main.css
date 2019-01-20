@@ -443,7 +443,7 @@ img.pull-left {
  * ------------------------------------------------------------------- */
 table {
    border-width: 0;
-   width: 80%;
+   width: 100%;
    max-width: 100%;
    font-family: "metropolis-regular", sans-serif;
 }
@@ -1721,7 +1721,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
  *
  * ------------------------------------------------------------------- */
 .s-pageheader {
-   min-height: 50px;
+   min-height: 174px;
    background-image: url(../images/hero-bg.jpg);
    background-repeat: no-repeat;
    background-position: center center;
@@ -1741,7 +1741,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 .s-pageheader--home {
-   min-height: 250px;
+   min-height: 480px;
    padding-top: 222px;
 }
 
@@ -1789,30 +1789,6 @@ button::-moz-focus-inner, input::-moz-focus-inner {
    height: 48px;
 }
 
-.header__login{
-   list-style: none;
-   font-size: 23px;
-   line-height: 1;
-   margin: 0;
-   padding: 0;
-   position: absolute;
-   right: 20px;
-   top: 12px;
-}
-
-.header__login a {
-   color: #FFFFFF;
-}
-
-.header__login li {
-   display: inline-block;
-   margin-right: 5px;
-   padding-left: 0;
-}
-
-.header__login li:last-child {
-   margin-right: 0;
-}
 
 /* -------------------------------------------------------------------
  * ## header social
@@ -2006,7 +1982,7 @@ body.search-is-visible {
    min-width: 21px;
    position: absolute;
    right: 20px;
-   top: 100px;
+   top: 15px;
    background-image: url(../images/icons/icon-search.svg);
    background-repeat: no-repeat;
    background-position: right center;
@@ -4236,6 +4212,5 @@ footer h4::after {
 #cForm {
    margin-top: 3.6rem;
 }
-
 
 /*# sourceMappingURL=main.css.map */

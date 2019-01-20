@@ -11,20 +11,11 @@
     <put-attribute name="manageFooter" value="/includee/cor/corFooter.jsp" />
   </definition>
   
-  <definition name="corporation/*" extends="Parent">
+  
+  
+   <definition name="corporation/**" extends="Parent">
     <put-attribute name="body" value="/WEB-INF/views/corporation/{1}.jsp" />
   </definition>
-  
-   <definition name="corporation/product/*" extends="Parent">
-    <put-attribute name="body" value="/WEB-INF/views/corporation/product/{1}.jsp" />
-  </definition>
-  
-   <definition name="corporation/category/*" extends="Parent">
-    <put-attribute name="body" value="/WEB-INF/views/corporation/category/{1}.jsp" />
-  </definition>
    
-   <definition name="corporation/travlePlace/*" extends="Parent">
-    <put-attribute name="body" value="/WEB-INF/views/corporation/travlePlace/{1}.jsp" />
-  </definition>
   
 </tiles-definitions>

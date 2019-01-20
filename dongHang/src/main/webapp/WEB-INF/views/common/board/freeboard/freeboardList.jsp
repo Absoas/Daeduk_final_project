@@ -1,22 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE>
-<html>
-<head>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/js/jquery-3.2.1.min.js"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script type = "text/javascript">
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
-</head>
-<script>
+
 
 	function ${pagingVO.funcName}(page){
 		$("[name='searchForm']").find("[name='page']").val(page);
+		
 		$("[name='searchForm']").submit();
 	}
 	
@@ -26,8 +18,8 @@
 		var body = "";
 		var regex = /^(\s+)/;
 		var boardList = data.dataList;
-		if(bodyList){
-			$.each(bodyList, function(i, board){
+		if(boardList){
+			$.each(boardList, function(i, board){
 				var testArray = regex.exec(board.board_title);
 				if(testArray && testArray.length > 0){
 					console.log(board.board_title+"--"+testArray[1]+"-");
@@ -48,9 +40,12 @@
 	}
 	
 	$(function(){
-		var navTag = $('#navtag');
+		
+		
 		var bodyTag = $('#bodylist');
 		var searchForm = $('[name="searchForm"]');
+		
+		
 		
 		//뒤로가기
 		$(window).on("popstate", function(event){
@@ -78,58 +73,40 @@
 		 });
 		 
 		//페이지context 이런거 안붙힐라고
-		 <c:url value="/board/boardView.do" var="boardView" />
+		 <c:url value="/freeboard/freeboardView.do" var="freeboardView" />
 		 
 		 $("#bodylist").on("click", "tr",function(){
-			var what = $(this).find("td:nth-child(2)").text();
-			location.href="${boardView}?what="+what;
+			var what = $(this).find("td:nth-child(1)").text();
+			location.href="${freeboardView}?what="+what;
 		 });
 		
 	});
 </script>
-<body>
-자유게시판 조회 기능
-kr.or.ddit.freeboard.controller.FreeboardListController
-<br><br>
-	<table>
-		<thead>
-		<tr>
-		<td>
-			<form action = "<c:url value="/freeboard/freeboardRetrieve.do"/>" name="searchForm">
-				<select class = "form-control" name = "searchType">
-					<option value = "">전체</option>
-					<option value = "writer">작성자</option>
-					<option value = "title">제목</option>
-					<option value = "content">내용</option>
-				</select>
-				
-				<script type="text/javascript">
-						$('[name="searchType"]').val("${param.searchType}");
-				</script>
-				
-				<input type = "text" name = "searchWord" value = "${param.searchWord }"/>
-				<input type = "submit" value = "검색"/>
-			</form>
-			</td>
-			</tr>
+
+<section class="s-content">
+	<div class="row masonry-wrap">
+	<table class = "table-bordered table-striped table-hover">
+		<thead class="thead-dark">
 			<tr>			
 				<th>게시글 번호</th>
 				<th>제목</th>
-				<th>작성자</th>
+				<th>작성자(ID)</th>
 				<th>작성일</th>
 				<th>조회수</th>
 				<th>추천수</th>
 			</tr>
 		</thead>
 		
-		<tbody id = "bodyList">
+		<tbody id = "bodylist">
 			<c:choose>
 			<c:when test="${not empty pagingVO.dataList }">
 				<c:forEach items="${pagingVO.dataList }" var="board">
 					<tr>
 						<td>${board.board_no }</td>
 						<td>${board.board_title }</td>
-						<td>${board.mem_id }</td>
+						<c:forEach items="${board.personList }" var="person">
+								<td>${person.person_name }(${person.person_id})</td>
+						</c:forEach>
 						<td>${board.board_date }</td>
 						<td>${board.board_view_count }</td>
 						<td>${board.board_recommend_count }</td>
@@ -146,19 +123,37 @@ kr.or.ddit.freeboard.controller.FreeboardListController
 		
 		<tfoot>
 		<tr>
-			<td>
+			<td colspan="7" class="text-center">
 				<nav aria-label="Page navigation" id="navtag">
 				 	${pagingVO.pagingHTML } 
 				</nav>
+				
+				<form action = "<c:url value="/freeboard/freeboardRetrieve.do"/>" name="searchForm" class="form-inline justify-content-center">
+					<input type="hidden" name="page" />
+	 				<select class = "form-control" name = "searchType">
+	 					<option value = "">전체</option> 
+	 					<option value = "mem_id">작성자ID</option>
+	 					<option value = "title">제목</option>
+	 					<option value = "content">내용</option>
+	 				</select>
+	 				<script type="text/javascript"> 
+	 						$('[name="searchType"]').val("${param.searchType}");
+	 				</script>
+	 				<input class="form-control" type = "text" name = "searchWord" value = "${param.searchWord }"/>
+	 				<input class ="btn btn-success" type = "submit" value = "검색"/>
+	 				<c:if test="${not empty authMember }">
+		 				<input class = "btn btn-success" type = "button"
+		 					value = "새글쓰기" onclick="location.href='<c:url value="/freeboard/freeboardInsert.do"/>';" />
+	 				</c:if>
+	 				
+	 				<c:if test="${empty authMember }">
+		 				<input class = "btn btn-success" type = "button"
+		 					value = "새글쓰기" onclick="alert('로그인을 해주세요')"/>
+	 				</c:if>
+	 				
+	 			</form>
 			</td>
-		</tr>
-			<tr>
-				<td>
-					<input type = "button" value = "작 성"
-						onclick="location.href='<c:url value = "/freeboard/freeboardInsert.do"/>';"/>
-				</td>
-			</tr>
 		</tfoot>
 	</table>
-</body>
-</html>
+</div>
+</section>

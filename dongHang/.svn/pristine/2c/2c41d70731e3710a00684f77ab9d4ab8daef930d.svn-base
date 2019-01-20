@@ -1,0 +1,84 @@
+package kr.or.ddit.common.board.freeboard.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.ServiceResult;
+import kr.or.ddit.common.board.freeboard.dao.IFreeFileDAO;
+import kr.or.ddit.common.board.freeboard.dao.IFreeboardDAO;
+import kr.or.ddit.vo.Free_FileVO;
+import kr.or.ddit.vo.FreeboardVO;
+import kr.or.ddit.vo.PagingInfoVO;
+import kr.or.ddit.vo.PersonVO;
+
+@Service
+public class FreeboardServiceImpl implements IFreeboardService{
+	
+	@Inject
+	IFreeboardDAO boardDAO;
+	@Inject
+	IFreeFileDAO fileDAO;
+	
+
+	@Override
+	public List<FreeboardVO> retrieveBoardList(PagingInfoVO<FreeboardVO> pagingVO) {
+		return boardDAO.selectBoardList(pagingVO);
+	}
+
+	@Override
+	public long retrieveBoardCount(PagingInfoVO<FreeboardVO> pagingVO) {
+		return boardDAO.selectTotalRecord(pagingVO);
+	}
+
+	@Override
+	public PersonVO selectPerson(String mem_id) {
+		return boardDAO.selectPerson(mem_id);
+	}
+
+	@Override
+	public ServiceResult createBoard(FreeboardVO freeVO) {
+		int rowCnt = boardDAO.insertBoard(freeVO);
+		int check = 1;
+		if(rowCnt > 0){
+			if(freeVO.getFreeFileList() != null)
+				check += freeVO.getFreeFileList().size();
+//			rowCnt += proce
+		}
+		return null;
+	}
+
+	@Override
+	public FreeboardVO retrieveBoard(long board_no) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ServiceResult modifyBoard(FreeboardVO freeVO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ServiceResult removeBoard(FreeboardVO freeVO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Free_FileVO downloadFreeFile(long freeFileNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ServiceResult rcmdBoard(long board_no) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+}

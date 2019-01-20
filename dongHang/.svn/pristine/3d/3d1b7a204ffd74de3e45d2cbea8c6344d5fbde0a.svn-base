@@ -1,0 +1,96 @@
+/**
+ * 게시글 상세조회의 덧글 처리
+ */
+
+	function replyListMaker(resp) {
+		if (resp.errors) {
+			alert(resp.errors.message); 					
+		} else { // 등록 성공
+			var html = "";
+			if(resp.dataList){
+				$.each(resp.dataList, function(idx, reply){
+					
+                    html += "<div class='comment__avatar'>";
+                    html += "<img width='50' height='50' class='avatar' src='../boardImages/I.jpg'>";
+                    html += "</div>";
+                    html += "<div class='comment__content'>";
+                    html += "<div class='comment__info'>";
+                    html += "<cite>"+reply.review_reply_mem_id+"</cite>";
+                    html += "<div class='comment__meta'>";
+                    html += "<time class='comment__time'>"+reply.review_reply_date+"</time>";
+                    html += "</div>";
+                    html += "</div>";
+                    html += "<div class='comment__text'>";
+                    html += "<p>"+reply.review_reply_content+"</p>";
+                    html += "<p id='"+reply.review_reply_mem_id+"_"+reply.review_reply_no+"'><span data-toggle='modal'  data-target='#replyDeleteModal' class='replyDelBtn'>[삭제]</span></p>";
+                    html += "</div>";
+                    html += "</div>";
+				});
+			}else{
+				html += "<li>댓글이 없습니다.</li>";
+			}
+			$.pagingArea.html(resp.pagingHTML);	
+			listBody.html(html);
+			replyForm[0].reset();
+		}
+	}
+	
+	function pagingReply(page, review_no){
+		$.ajax({
+			url:$.getContextPath()+"/postboard/replyList.do",
+			data:{
+				review_no:review_no,
+				page:page
+			},
+			dataType:"json",
+			success:replyListMaker,
+			error:function(resp){
+				console.log(resp.status);
+			}
+		});
+	}
+	
+	
+	$(function(){
+		$.pagingArea = $("#pagingArea");
+		listBody = $("#listBody");
+ 		replyForm = $("[name='replyForm']");
+ 		var delModal = $("#replyDeleteModal");
+ 		review_reply_no = "";
+ 		review_reply_mem_id = "";
+ 		listBody.on("click", "span" ,function(){
+ 			console.log("눌렸음");
+ 			var trId = $(this).closest("p").prop("id");
+ 			review_reply_no = trId.substring(trId.indexOf("_")+1);
+ 			review_reply_mem_id = trId.substring(0,trId.indexOf("_"));
+// 			review_reply_mem_id = $(this).find("td:nth-child(1)").text();
+ 			console.log(review_reply_no);
+ 			console.log(review_reply_mem_id);
+ 			delModal.find("#review_reply_no").val(review_reply_no);
+ 			delModal.modal("show");
+ 		});
+ 		
+ 		$("#modalBtn").on("click", function(){
+ 			var action = replyForm.attr("action");
+ 			replyForm.attr("action", $.getContextPath()+"/postboard/replyDelete.do");
+ 			var review_reply_pass = delModal.find("#review_reply_pass").val();
+ 			replyForm.find("[name='review_reply_no']").val(review_reply_no);
+ 			replyForm.find("[name='review_reply_pass']").val(review_reply_pass);
+ 			console.log(review_reply_pass);
+ 			replyForm.find("[name='review_reply_mem_id']").val(review_reply_mem_id);
+ 			replyForm.submit();
+ 			replyForm.attr("action", action);
+ 			replyForm[0].reset();
+ 			$("#modalForm")[0].reset(); 			
+ 			delModal.modal("hide");
+ 		});
+ 		
+ 		replyForm.ajaxForm({
+ 			dataType:'json',
+ 			success:replyListMaker,
+ 			error:function(resp){
+ 				alert(resp.status);
+ 			}
+ 		});
+ 		paging(1);
+	});

@@ -1,0 +1,81 @@
+/**
+ * 게시글 상세조회의 덧글 처리
+ */
+
+	function replyListMaker(resp) {
+		if (resp.errors) {
+			alert(resp.errors.message); 					
+		} else { // 등록 성공
+			var html = "";
+			if(resp.dataList){
+				$.each(resp.dataList, function(idx, reply){
+					html += "<tr id='TR_"+reply.review_reply_no+"'>";
+					html += "<td>"+reply.review_reply_mem_id+"</td>";
+					html += "<td>"+reply.review_reply_content+"</td>";
+					html += "<td>"+reply.review_reply_date+"&nbsp;<span data-toggle='modal' class='replyDelBtn'>[삭제]</span></td>";
+					html += "</tr>";
+				});
+			}else{
+				html += "<tr><td colspan='4'>데이터 없음.</td></tr>";
+			}
+			$.pagingArea.html(resp.pagingHTML);	
+			listBody.html(html);
+			replyForm[0].reset();
+		}
+	}
+	
+	function pagingReply(page, review_no){
+		$.ajax({
+			url:$.getContextPath()+"/postboard/replyList.do",
+			data:{
+				review_no:review_no,
+				page:page
+			},
+			dataType:"json",
+			success:replyListMaker,
+			error:function(resp){
+				console.log(resp.status);
+			}
+		});
+	}
+	
+	
+	$(function(){
+		$.pagingArea = $("#pagingArea");
+		listBody = $("#listBody");
+ 		replyForm = $("[name='replyForm']");
+ 		var delModal = $("#replyDeleteModal");
+ 		review_reply_no = "";
+ 		review_reply_mem_id = "";
+ 		listBody.on("click", "tr" ,function(){
+ 			var trId = $(this).closest("tr").prop("id");
+ 			review_reply_no = trId.substring(trId.indexOf("_")+1);
+ 			review_reply_mem_id = $(this).find("td:nth-child(1)").text();
+ 			delModal.find("#review_reply_no").val(review_reply_no);
+ 			delModal.modal("show");
+ 		});
+ 		
+ 		$("#modalBtn").on("click", function(){
+ 			var action = replyForm.attr("action");
+ 			replyForm.attr("action", $.getContextPath()+"/postboard/replyDelete.do");
+ 			var review_reply_pass = delModal.find("#review_reply_pass").val();
+ 			replyForm.find("[name='review_reply_no']").val(review_reply_no);
+ 			replyForm.find("[name='review_reply_pass']").val(review_reply_pass);
+ 			console.log(review_reply_pass);
+ 			replyForm.find("[name='review_reply_mem_id']").val(review_reply_mem_id);
+ 			replyForm.submit();
+ 			replyForm.attr("action", action);
+ 			replyForm[0].reset();
+ 			$("#modalForm")[0].reset(); 			
+ 			delModal.modal("hide");
+ 		});
+ 		
+ 		replyForm.ajaxForm({
+ 			dataType:'json',
+ 			success:replyListMaker,
+ 			error:function(resp){
+ 				alert(resp.status);
+ 			}
+ 		});
+ 		paging(1);
+	});
