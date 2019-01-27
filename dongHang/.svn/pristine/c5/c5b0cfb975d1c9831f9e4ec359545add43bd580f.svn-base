@@ -1,0 +1,233 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<link rel="stylesheet" href="${cPath }/css/reservation/tabMenu.css">
+
+
+    
+<script>
+	$(function(){
+		
+		$("#startDate").flatpickr({
+			minDate : new Date()
+		});
+		$("#endDate").flatpickr({
+			minDate : new Date()
+		});
+		$("#airStartDate").flatpickr({
+			minDate : new Date()
+		});
+		$("#airEndDate").flatpickr({
+			minDate : new Date()
+		});
+	     
+		var selectDept = $('[name="selectDept"]');
+		var selectArr = $('[name="selectArr"]');
+			
+		selectDept.on("change",function() {
+			dept = $("select[name='selectDept']").val();
+			arr = $("select[name='selectArr']").val();
+			
+			if(dept == arr){
+				alert('중복된 도시는 선택 불가합니다.');
+			}
+		});
+		
+		selectArr.on("change",function() {
+			dept = $("select[name='selectDept']").val();
+			arr = $("select[name='selectArr']").val();
+			
+			if(dept == arr){
+				alert('중복된 도시는 선택 불가합니다.');
+			}
+		});
+		
+			
+		$('#selectForm').on('submit', function(event){
+			var localCode = $('[name="selectLocal"]').val();
+		    if(localCode == ''){
+		    	alert("지역을 선택하세요");
+				event.preventDefault();
+		    	return;
+		    }
+		    
+		    var personnel = $('[name="personnel"]').val();
+			    
+		 if(0 >= personnel  || personnel > 20){
+			   	alert("인원 확인!");
+				event.preventDefault();
+			   	return;
+			}
+		});
+	});
+	
+</script>
+<section class="s-content">
+   <div class="row masonry-wrap">
+		<div class="container">
+		    <ul class="tabs">
+		        <li><a href="#tab1">비행기</a></li>
+		        <li><a href="#tab2">기차</a></li>
+		    </ul>
+		    
+		    <div class="tab_container">
+		        <div id="tab1" class="tab_content">
+		            <h2>비행기</h2>
+		           	
+					<div class="col-full s-content__main">
+						<form action="" id="airLineForm" method="post">
+							<table>
+								<tr>
+									<th>출발 날짜</th>
+									<td><input type="text" id="airStartDate" name="startDate"></td>
+								</tr>
+								<tr>
+									<th>도착 날짜</th>
+									<td><input type="text" id="airEndDate" name="endDate"></td>
+								</tr>
+								
+								<tr>
+									<th>출발 도시</th>
+									<td>
+										<select name="selectDept" id="selectDept">
+											<OPTION value="">지역을 선택하세요</OPTION>
+											<OPTION value="1">서울</OPTION>
+											<OPTION value="2">인천</OPTION>
+											<OPTION value="3">대전</OPTION>
+											<OPTION value="4">대구</OPTION>
+											<OPTION value="5">광주</OPTION>
+											<OPTION value="6">부산</OPTION>
+											<OPTION value="7">울산</OPTION>
+											<OPTION value="8">세종</OPTION>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>도착 도시</th>
+									<td>
+										<select name="selectArr" id="selectArr">
+											<OPTION value="">지역을 선택하세요</OPTION>
+											<OPTION value="1">서울</OPTION>
+											<OPTION value="2">인천</OPTION>
+											<OPTION value="3">대전</OPTION>
+											<OPTION value="4">대구</OPTION>
+											<OPTION value="5">광주</OPTION>
+											<OPTION value="6">부산</OPTION>
+											<OPTION value="7">울산</OPTION>
+											<OPTION value="8">세종</OPTION>
+										</select>
+									</td>
+								</tr>
+								
+								<tr>
+									<th>여행인원 선택</th>
+									<td>
+										성인<input type="number" name="adult" value="1" min="1" max="20">(최대 20명)<br>
+										어린이<input type="number" name="children" value="1" min="1" max="20">(최대 20명)<br>
+									</td>
+								</tr>
+								
+									
+							</table>
+							<input type="hidden" name="traffic" value="airplain"><br>
+							<input type="submit" value="다음" >
+						</form>
+					</div>
+		        </div>
+		        
+		        
+		        <div id="tab2" class="tab_content">
+		            <h2>기차</h2>
+		           	
+		           	<div class="col-full s-content__main">
+						<form action="" id="trainForm" method="post">
+							<table>
+								<tr>
+									<th>출발 날짜</th>
+									<td><input type="text" id="startDate" name="startDate"></td>
+								</tr>
+								<tr>
+									<th>도착 날짜</th>
+									<td><input type="text" id="endDate" name="endDate"></td>
+								</tr>
+								
+								<tr>
+									<th>출발 도시</th>
+									<td>
+										<select name="selectDept" id="selectDept">
+											<OPTION value="">지역을 선택하세요</OPTION>
+											<OPTION value="1">서울</OPTION>
+											<OPTION value="2">인천</OPTION>
+											<OPTION value="3">대전</OPTION>
+											<OPTION value="4">대구</OPTION>
+											<OPTION value="5">광주</OPTION>
+											<OPTION value="6">부산</OPTION>
+											<OPTION value="7">울산</OPTION>
+											<OPTION value="8">세종</OPTION>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>도착 도시</th>
+									<td>
+										<select name="selectArr" id="selectArr">
+											<OPTION value="">지역을 선택하세요</OPTION>
+											<OPTION value="1">서울</OPTION>
+											<OPTION value="2">인천</OPTION>
+											<OPTION value="3">대전</OPTION>
+											<OPTION value="4">대구</OPTION>
+											<OPTION value="5">광주</OPTION>
+											<OPTION value="6">부산</OPTION>
+											<OPTION value="7">울산</OPTION>
+											<OPTION value="8">세종</OPTION>
+										</select>
+									</td>
+								</tr>
+								
+								<tr>
+									<th>여행인원 선택</th>
+									<td>
+										성인<input type="number" name="adult" value="1" min="1" max="20">(최대 20명)<br>
+										어린이<input type="number" name="children" value="1" min="1" max="20">(최대 20명)<br>
+									</td>
+								</tr>
+								
+									
+							</table>
+							 <input type="hidden" name="traffic" value="train"><br>
+							<input type="submit" value="다음" >
+						</form>
+					</div>
+					
+		        </div>
+		    </div>
+		</div>
+
+
+<!-- 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  -->
+		<script type="text/javascript">
+			
+			$(document).ready(function() {
+			
+				//Default Action
+				$(".tab_content").hide(); //Hide all content
+				$("ul.tabs li:first").addClass("active").show(); //Activate first tab
+				$(".tab_content:first").show(); //Show first tab content
+				
+				//On Click Event
+				$("ul.tabs li").click(function() {
+					$("ul.tabs li").removeClass("active"); //Remove any "active" class
+					$(this).addClass("active"); //Add "active" class to selected tab
+					$(".tab_content").hide(); //Hide all tab content
+					var activeTab = $(this).find("a").attr("href"); //Find the rel attribute value to identify the active tab + content
+					$(activeTab).fadeIn(); //Fade in the active content
+					return false;
+				});
+			
+			});
+		</script>
+	</div>
+</section>

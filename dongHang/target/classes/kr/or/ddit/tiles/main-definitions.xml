@@ -15,9 +15,10 @@
     <put-attribute name="body" value="/WEB-INF/views/common/board/{1}.jsp" />
   </definition>
   
-  <definition name="crew/**" extends="parent">
-    <put-attribute name="body" value="/WEB-INF/views/crew/{1}.jsp" />
+   <definition name="common/**" extends="parent">
+    <put-attribute name="body" value="/WEB-INF/views/common/{1}.jsp" />
   </definition>
+  
   
   <definition name="member/**" extends="parent">
     <put-attribute name="body" value="/WEB-INF/views/member/{1}.jsp" />
@@ -31,4 +32,8 @@
     <put-attribute name="body" value="/WEB-INF/views/weather/{1}.jsp" />
   </definition>
 
+   <definition name="crew/**" extends="parent">
+    <put-attribute name="body" value="/WEB-INF/views/crew/{1}.jsp" />
+  </definition>
+	
 </tiles-definitions>

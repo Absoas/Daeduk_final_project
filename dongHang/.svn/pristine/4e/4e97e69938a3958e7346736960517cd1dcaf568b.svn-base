@@ -1,0 +1,69 @@
+package kr.or.ddit.vo;
+
+import java.io.Serializable;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+
+import org.apache.ibatis.type.Alias;
+import org.hibernate.validator.constraints.NotBlank;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Alias("personVO")
+public class PersonVO implements Serializable , HttpSessionBindingListener{
+	
+	public PersonVO(String person_id, String person_pass) {
+		super();
+		this.person_id = person_id;
+		this.person_pass = person_pass;
+	}
+	
+	@NotBlank
+	private String person_id;
+	@NotBlank
+	private String person_pass;
+	@NotBlank
+	private String person_zip;
+	@NotBlank
+	private String person_addr1;
+	@NotBlank
+	private String person_addr2;
+	@NotBlank
+	private String person_tel;
+	@NotBlank
+	private String person_mail;
+	@NotBlank
+	private String person_name;
+
+	@NotBlank
+	private String person_type;
+	
+	
+	
+	@Override
+	public void valueBound(HttpSessionBindingEvent event) {
+		if("authMember".equals(event.getName())) {
+			ServletContext application = event.getSession().getServletContext();
+			Set<PersonVO> applicationUsers = (Set<PersonVO>) application.getAttribute("applicationUsers");
+			applicationUsers.add(this);
+		}
+	}
+
+	@Override
+	public void valueUnbound(HttpSessionBindingEvent event) {
+		if("authMember".equals(event.getName())) {
+			ServletContext application = event.getSession().getServletContext();
+			Set<PersonVO> applicationUsers = (Set<PersonVO>) application.getAttribute("applicationUsers");
+			applicationUsers.remove(this);
+		}
+		
+	}
+}

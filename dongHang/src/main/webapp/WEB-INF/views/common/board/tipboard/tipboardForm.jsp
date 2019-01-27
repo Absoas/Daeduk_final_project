@@ -24,13 +24,6 @@
 					</div></td>
 			</tr>
 			<tr>
-				<th>비밀번호</th>
-				<td><div class="input-group">
-						<input class="form-control" type="text" name="travel_tip_pass"
-							value="${travel_tip.travel_tip_pass}" /><form:errors path="travel_tip_pass" element="span" cssClass="error input-group-text" />
-					</div></td>
-			</tr>
-			<tr>
 				<th>기존 파일</th>
 				<td>
 					<c:forEach items="${travel_tip.pdsList }" var="pds" varStatus="vs">

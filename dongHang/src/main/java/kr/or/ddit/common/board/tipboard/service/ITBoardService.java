@@ -62,13 +62,10 @@ public interface ITBoardService {
 	
 	public Travel_Tip_FileVO downloadPds(long pds_no);
 	
-	public ServiceResult rcmdBoard(long travel_tip_no);
+	public ServiceResult rcmdBoard(long travel_tip_no, String authMember);
 	
-	/**
-	 * 첨부파일 다운로드용 메소드
-	 * @param pds_no 파일 번호
-	 * @return 없다면, BoardException 발생
-	 */
+	public ServiceResult reportBoard(long travel_tip_no, String authMember);
+	
 }
 
 

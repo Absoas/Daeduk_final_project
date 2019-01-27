@@ -1,138 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<style>
-.pgn {
-	margin: 3rem auto;
-	text-align: center;
-}
-
-.pgn ul {
-	display: inline-block;
-	list-style: none;
-	margin-left: 0;
-	position: relative;
-	padding: 0 6rem;
-}
-
-.pgn ul li {
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-}
-
-.pgn__num {
-	font-family: "metropolis-bold", sans-serif;
-	font-size: 1.5rem;
-	line-height: 2.4rem;
-	display: inline-block;
-	padding: .6rem 1.2rem;
-	height: 3.6rem;
-	margin: .3rem .15rem;
-	color: #151515;
-	border-radius: 3px;
-	-webkit-transition: all 0.3s ease-in-out;
-	transition: all 0.3s ease-in-out;
-}
-
-.pgn__num:hover {
-	background: #808080;
-	color: #ffffff;
-}
-
-.pgn .current, .pgn .current:hover {
-	background-color: #000000;
-	color: #FFFFFF;
-}
-
-.pgn .inactive, .pgn .inactive:hover {
-	color: #888888;
-	cursor: default;
-}
-
-.pgn__prev, .pgn__next {
-	display: block;
-	background-color: #FFFFFF;
-	background-repeat: no-repeat;
-	background-size: 18px 12px;
-	background-position: center;
-	height: 4.8rem;
-	width: 4.8rem;
-	line-height: 4.8rem;
-	padding: 0;
-	margin: 0;
-	border-radius: 50%;
-	box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
-	font: 0/0 a;
-	text-shadow: none;
-	color: transparent;
-	-webkit-transition: all 0.2s ease-in-out;
-	transition: all 0.2s ease-in-out;
-	position: absolute;
-	top: 50%;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-}
-
-.pgn__prev:hover, .pgn__next:hover {
-	background-color: #151515;
-	color: #FFFFFF;
-	text-decoration: none;
-	background-repeat: no-repeat;
-	background-position: center;
-}
-
-.pgn__prev {
-	background-image: url("../images/icons/icon-arrow-left.svg");
-	left: 0;
-}
-
-.pgn__prev:hover {
-	background-image: url("../images/icons/icon-arrow-left-w.svg");
-}
-
-.pgn__next {
-	background-image: url("../images/icons/icon-arrow-right.svg");
-	right: 0;
-}
-
-.pgn__next:hover {
-	background-image: url("../images/icons/icon-arrow-right-w.svg");
-}
-
-.pgn__prev.inactive, .pgn__next.inactive {
-	background-color: #ffffff;
-	opacity: 0.5;
-	cursor: default;
-}
-
-.pgn__prev.inactive:hover {
-	background-image: url("../images/icons/icon-arrow-left.svg");
-}
-
-.pgn__next.inactive:hover {
-	background-image: url("../images/icons/icon-arrow-right.svg");
-}
-
-/* ------------------------------------------------------------------- 
- * responsive:
- * pagination
- * ------------------------------------------------------------------- */
-@media only screen and (max-width:600px) {
-	.pgn ul {
-		padding: 0 5rem;
-	}
-	.pgn__prev, .pgn__next {
-		height: 3.6rem;
-		width: 3.6rem;
-		line-height: 3.6rem;
-		background-size: 12px 8px;
-	}
-}
-</style>
 <script type="text/javascript">
 
 function ${pagingVO.funcName}(page){
@@ -191,87 +61,112 @@ $(function(){
 	 });
 })
 
-</script>
-<link href="${pageContext.request.contextPath}/css/paging.css">
+</script> 
 
+<style>
+	.xans-layout-poll { margin:0 0 20px; padding:0 0 16px; border-bottom:1px solid #e8e8e8; }
+.xans-layout-poll h2 { height:30px; color:#2e2e2e; font-size:12px; }
+.xans-layout-poll h3 { min-height:27px; padding:0 0 0 36px; color:#757575; font-size:12px; line-height:18px; background:url("http://img.echosting.cafe24.com/skin/base_ko_KR/layout/ico_poll_question.gif") no-repeat 10px 3px; }
+.xans-layout-poll h3 strong { visibility:hidden; overflow:hidden; width:0; height:0; font-size:0; line-height:0; }
+.xans-layout-poll h3 span { display:inline-block; padding:0 0 0 9px; border-left:1px solid #d9d9d9; }
+.xans-layout-poll ul { margin:15px 0 14px 10px; color:#757575; font-size:11px; line-height:1.5; }
+.xans-layout-poll li { margin:5px 0 0; }
+.xans-layout-poll li input[type=radio] { width:13px; height:13px; vertical-align:-3px; *vertical-align:2px; margin:0 7px 0 0; }
+.xans-layout-poll p { margin:0 10px 0 0; padding:0 23px 0 0; text-align:right; line-height:1.5; background:url("http://img.echosting.cafe24.com/skin/base_ko_KR/layout/ico_poll2.gif") no-repeat; }
+.xans-layout-poll p a { padding:0 0 0 9px; text-decoration:none; background:url("http://img.echosting.cafe24.com/skin/base_ko_KR/layout/ico_poll1.gif") no-repeat; }
+.xans-layout-poll p.btnResult { background-position:100% 1px; }
+.xans-layout-poll p.btnPoll { background-position:100% -99px; }
+.xans-layout-poll p.btnResult a { color:#757575; background-position:0 3px; }
+.xans-layout-poll p.btnPoll a { color:#000; background-position:0 -97px; }
+</style>
 
-<div id="page-wrapper">
-	<div class="row">
-		<div class="col-lg-12">
-			<h1 class="page-header">설문조사</h1>
+<div id="wrapper">
+
+        <div id="page-wrapper">
+
+		<div module="Layout_Poll">
+			<!--@css(/css/module/layout/poll.css)-->
+			<h2>온라인 설문조사</h2>
+			<h3>
+				<strong>질문 :</strong><span>{$poll_title}</span>
+			</h3>
+			<fieldset>
+				<legend>설문조사 항목</legend>
+				<ul>
+					<li>{$poll}{$poll_name}</li>
+					<li>{$poll}{$poll_name}</li>
+					<li>{$poll}{$poll_name}</li>
+					<li>{$poll}{$poll_name}</li>
+				</ul>
+				<p class="btnResult">
+					<a href="#none" onclick="{$action_poll_result}">결과보기</a>
+				</p>
+				<p class="btnPoll">
+					<a href="#none" onclick="{$action_poll_submit}">투표하기</a>
+				</p>
+			</fieldset>
 		</div>
-		<!-- /.col-lg-12 -->
-	</div>
-	<!-- /.row -->
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="panel panel-default">
-				<div class="panel-heading"></div>
-				<!-- /.panel-heading -->
-				<div class="panel-body">
-					<table class="table table-striped table-bordered table-hover">
-						<thead>
-							<tr>
-								<th>순번</th>
-								<th>설문번호</th>
-								<th>제목</th>
-								<th>기업ID</th>
-								<th>작성날짜</th>
-							</tr>
-						</thead>
-						<tbody id="bodylist">
-							<c:choose>
-								<c:when test="${not empty pagingVO.dataList }">
-									<c:forEach items="${pagingVO.dataList }" var="survey">
-										<tr>
-											<td>${survey.rnum }</td>
-											<td>${survey.survey_no }</td>
-											<td>${survey.survey_title }</td>
-											<td>${survey.company_id }</td>
-											<td>${survey.survey_date }</td>
-										</tr>
-									</c:forEach>
-								</c:when>
-								<c:otherwise>
-									<tr>
-										<td colspan="7">검색 조건에 맞는 글이 없음.</td>
-									</tr>
-								</c:otherwise>
-							</c:choose>
-						</tbody>
-
-						<tfoot>
-							<tr>
-								<td colspan="7" class="text-center">
-
-									<nav aria-label="Page navigation" id="navtag">
-										${pagingVO.pagingHTML }</nav>
-
-									<form action="<c:url value="/survey/surveyList.do"/>"
-										name="searchForm" class="form-inline justify-content-center">
-										<input type="hidden" name="page" /> <input type="hidden"
-											name="company_id" value="${authMember.person_id}" /> <select
-											class="form-control" name="searchType">
-											<option value="">검색 조건</option>
-											<option value="title">설문 제목</option>
-										</select>
-										<script type="text/javascript">
+		<table border='1'>
+	<thead>
+		<tr>
+			<th>순번</th>
+			<th>설문번호</th>
+			<th>제목</th>
+			<th>기업ID</th>
+			<th>작성날짜</th>
+		</tr>
+	</thead>
+	<tbody id="bodylist">
+		<c:choose>
+			<c:when test="${not empty pagingVO.dataList }">
+				<c:forEach items="${pagingVO.dataList }" var="survey">
+					<tr>
+						<td>${survey.rnum }</td>
+						<td>${survey.survey_no }</td>
+						<td>${survey.survey_title }</td>
+						<td>${survey.company_id }</td>
+						<td>${survey.survey_date }</td>
+					</tr>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<tr>
+					<td colspan="7">검색 조건에 맞는 글이 없음.</td>
+				</tr>
+			</c:otherwise>
+		</c:choose>
+		<tr>
+		<td><a href='<c:url value="/survey/surveyInsert.do"/>'>등록</a></td>
+		</tr>
+	</tbody>
+	
+	<tfoot>
+		<tr>
+			<td colspan="7" class="text-center">
+				<nav aria-label="Page navigation" id="navtag">
+				 	${pagingVO.pagingHTML } 
+				</nav>
+				
+				<form action="<c:url value="/survey/surveyList.do"/>" name="searchForm" class="form-inline justify-content-center">
+					<input type="hidden" name="page" />
+					<input type="hidden" name="company_id" value="${authMember.person_id}" />
+					<select class="form-control" name="searchType">
+						<option value="">검색 조건</option>
+						<option value="title">설문 제목</option>
+					</select>
+					<script type="text/javascript">
 						$('[name="searchType"]').val("${param.searchType}");
 					</script>
-										<input class="form-control" type="text" name="searchWord"
-											value="${param.searchWord }" /> <input
-											class="btn btn-success" type="submit" value="검색" />
-										&nbsp;&nbsp;&nbsp;
-									</form>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-				<!-- /.panel-body -->
-			</div>
-			<!-- /.panel -->
-		</div>
-		<!-- /.col-lg-12 -->
-	</div>
+					<input class="form-control" type="text" name="searchWord" 
+							value="${param.searchWord }"/>
+					<input class="btn btn-success" type="submit" value="검색" />
+					&nbsp;&nbsp;&nbsp;
+				</form>
+			</td>
+		</tr>
+	</tfoot>
+</table>
 </div>
+</div>
+	
+    

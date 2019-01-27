@@ -8,7 +8,6 @@
 
 	function ${pagingVO.funcName}(page){
 		$("[name='searchForm']").find("[name='page']").val(page);
-		
 		$("[name='searchForm']").submit();
 	}
 	
@@ -27,11 +26,11 @@
 				}
 				body+="<tr><td>"+board.board_no+"</td>";
 				body+="<td>"+board.board_title+"</td>";
-				body+="<td>"+board.board_mem_id+"</td>";
+				body+="<td>"+board.person_name+"("+board.mem_id+")"+"</td>";
 				body+="<td>"+board.board_date+"</td>";
 				body+="<td>"+board.board_view_count+"</td>";
 				body+="<td>"+board.board_recommend_count+"</td></tr>";
-			})
+			});
 		}else{
 			body+="<tr><td colspan='6'>데이터없음</td></tr>";
 		}
@@ -40,12 +39,9 @@
 	}
 	
 	$(function(){
-		
-		
+		var navTag = $('#navtag');
 		var bodyTag = $('#bodylist');
 		var searchForm = $('[name="searchForm"]');
-		
-		
 		
 		//뒤로가기
 		$(window).on("popstate", function(event){
@@ -59,18 +55,18 @@
 		});
 		
 		//submit 결과를 ajaxForm이 가져옴
-		searchForm.ajaxForm({ 
-		       dataType:  'json', 
-		       success:  function (data){
-				makeList(data);
-				// 비동기 처리 성공 -> push state on history (state, title, url)
-				var pageNum = searchForm.find('[name="page"]').val();
-				var queryString = searchForm.serialize();
+// 		searchForm.ajaxForm({ 
+// 		       dataType:  'json', 
+// 		       success:  function (data){
+// 				makeList(data);
+// 				// 비동기 처리 성공 -> push state on history (state, title, url)
+// 				var pageNum = searchForm.find('[name="page"]').val();
+// 				var queryString = searchForm.serialize();
 				
-				history.pushState(data, pageNum+" 페이지", "?"+queryString);
-				searchForm.find('[name="page"]').val("");
-			},
-		 });
+// 				history.pushState(data, pageNum+" 페이지", "?"+queryString);
+// 				searchForm.find('[name="page"]').val("");
+// 			},
+// 		 });
 		 
 		//페이지context 이런거 안붙힐라고
 		 <c:url value="/freeboard/freeboardView.do" var="freeboardView" />
@@ -88,25 +84,23 @@
 	<table class = "table-bordered table-striped table-hover">
 		<thead class="thead-dark">
 			<tr>			
-				<th>게시글 번호</th>
+				<th>번호</th>
 				<th>제목</th>
 				<th>작성자(ID)</th>
 				<th>작성일</th>
-				<th>조회수</th>
-				<th>추천수</th>
+				<th>조회</th>
+				<th>추천</th>
 			</tr>
 		</thead>
 		
-		<tbody id = "bodylist">
+		<tbody id = "bodylist" class="bodylist">
 			<c:choose>
 			<c:when test="${not empty pagingVO.dataList }">
 				<c:forEach items="${pagingVO.dataList }" var="board">
 					<tr>
 						<td>${board.board_no }</td>
 						<td>${board.board_title }</td>
-						<c:forEach items="${board.personList }" var="person">
-								<td>${person.person_name }(${person.person_id})</td>
-						</c:forEach>
+						<td>${board.person_name}(${board.mem_id })</td>
 						<td>${board.board_date }</td>
 						<td>${board.board_view_count }</td>
 						<td>${board.board_recommend_count }</td>
@@ -122,6 +116,7 @@
 		</tbody>
 		
 		<tfoot>
+		
 		<tr>
 			<td colspan="7" class="text-center">
 				<nav aria-label="Page navigation" id="navtag">
@@ -130,7 +125,7 @@
 				
 				<form action = "<c:url value="/freeboard/freeboardRetrieve.do"/>" name="searchForm" class="form-inline justify-content-center">
 					<input type="hidden" name="page" />
-	 				<select class = "form-control" name = "searchType">
+	 				<select select class="form-control" name="searchType">
 	 					<option value = "">전체</option> 
 	 					<option value = "mem_id">작성자ID</option>
 	 					<option value = "title">제목</option>
@@ -139,7 +134,8 @@
 	 				<script type="text/javascript"> 
 	 						$('[name="searchType"]').val("${param.searchType}");
 	 				</script>
-	 				<input class="form-control" type = "text" name = "searchWord" value = "${param.searchWord }"/>
+	 				<input class="form-control" type="text" name="searchWord" 
+							value="${param.searchWord }"/>
 	 				<input class ="btn btn-success" type = "submit" value = "검색"/>
 	 				<c:if test="${not empty authMember }">
 		 				<input class = "btn btn-success" type = "button"

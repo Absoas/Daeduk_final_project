@@ -1,0 +1,37 @@
+package kr.or.ddit.api.travel.service;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.ServiceResult;
+import kr.or.ddit.api.travel.dao.ITravelDAO;
+import kr.or.ddit.vo.TrainVO;
+
+@Service
+public class TravelServiceImpl implements ITravelService {
+	
+	@Inject
+	ITravelDAO travelDAO;
+	
+	@Override
+	public ServiceResult createTrain(TrainVO train) {
+		ServiceResult result = ServiceResult.FAILED;
+		int rowCnt = 0;
+		rowCnt = travelDAO.insertTrain(train);
+		if(rowCnt>0) result = ServiceResult.OK;
+		return result;
+	}
+
+
+}
+
+
+
+
+
+
+
+
+
+

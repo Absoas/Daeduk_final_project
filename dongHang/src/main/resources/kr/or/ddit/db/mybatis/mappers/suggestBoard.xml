@@ -35,7 +35,7 @@
 			    #{suggest_board_title},
 			    #{suggest_board_content},
 			    SYSDATE,
-			    'A001'
+			    #{mem_id}
 			)
 	</insert>
 	
@@ -91,7 +91,7 @@
 		    SUGGEST_BOARD_CONTENT = #{suggest_board_content }
 		WHERE
 		   SUGGEST_BOARD_NO = #{suggest_board_no }
-		   AND MEM_ID = 'A001'
+		   AND MEM_ID = #{mem_id}
 	</update>
 	
 </mapper>

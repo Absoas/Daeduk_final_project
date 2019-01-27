@@ -52,9 +52,9 @@ public class UpdatePostBoardController{
 			}else if(ServiceResult.FAILED.equals(result)){
 				model.addAttribute("message", "서버 오류");
 				view = "common/board/postboard/postboardForm";
-			}else {
-				model.addAttribute("message", "사용자 ID or PASS 오류");
-				view = "common/board/postboard/postboardForm";
+//			}else {
+//				model.addAttribute("message", "사용자 ID or PASS 오류");
+//				view = "common/board/postboard/postboardForm";
 			}
 		}else {
 			view = "common/board/postboard/postboardForm";

@@ -20,6 +20,7 @@
 				body+="<td>"+person.person_mail+"</td>";
 				body+="<td>"+person.person_tel+"</td>";
 				})
+				body+="<td>"+member.mem_state+"</td>";
 				body+="</tr>";
 			})
 		}else{
@@ -54,8 +55,14 @@
 				searchForm.find('[name="page"]').val("");
 			},
 		});
+		<c:url value="/admin/memberUpdate.do" var="memberUpdate" />
 		
+		$('#bodyList').on("click", "tr", function(){
+			var what = $(this).find("td:nth-child(1)").text();
+			location.href="${memberUpdate}?what="+what;
+		});
 	});
+	
 </script>
 
 <div id="wrapper">
@@ -69,6 +76,7 @@
 					<th>회원이름</th>
 					<th>메일</th>
 					<th>번호</th>
+					<th>상태</th>
 				</tr>
 			</thead>
 			<tbody id="bodyList">
@@ -82,6 +90,7 @@
 									<td>${person.person_mail}</td>
 									<td>${person.person_tel }</td>
 								</c:forEach>
+								<td>${member.mem_state }</td>
 							</tr>
 						</c:forEach>
 					</c:when>
@@ -103,15 +112,16 @@
 			</tfoot>
 		</table>
 		
-		<form name="searchForm" action="${pageContext.request.contextPath }/admin/memberManagementList.do">
+		<form name="searchForm" action="${pageContext.request.contextPath }/admin/memberManagementList.do" class="form-inline justify-content-center">
 			<input type="hidden" name="page" />
-			<select name="searchType">
+			<select name="searchType" class="form-control">
 				<option value="">검색 조건</option>
 				<option value="id" >회원아이디</option>
 				<option value="name">회원이름</option>
 			</select>
-			<input type="text" name="searchWord" value="${pagingVO.searchWord }"/>
-			<input type="submit" value="검색" />
+			<input type="text" name="searchWord" value="${pagingVO.searchWord }" class="form-control"/>
+			<input type="submit" value="검색" class="btn btn-success" />
+			<input type = "button" value = "블랙리스트관리" onclick="location.href='<c:url value="/admin/blackListRetrieve.do"/>';"/>
 		</form>
 		<script>
 			document.searchForm.searchType.value= "${pagingVO.searchType}"

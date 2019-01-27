@@ -1,8 +1,0 @@
-package kr.or.ddit.common.board.freeboard.controller;
-
-import org.springframework.stereotype.Controller;
-
-@Controller
-public class FreeReplyUpdateController {
-
-}

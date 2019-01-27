@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.api.travel.dao.ITrafficDAO">
+	
+	<select id="selectAir">
+		select * from free_airLine;
+	</select>
+
+	<insert id="insertAir">
+		INSERT INTO free_airline (
+		    airline_no,
+		    airline_date,
+		    airline_startdate,
+		    airline_enddate,
+		    airline_type,
+		    airline_seat,
+		    airline_charge,
+		    airline_airline
+		) VALUES (
+			#{airline_no},
+			sysdate,
+			#{airline_date},
+			#{airline_startdate},
+			#{airline_enddate},
+			#{airline_type},
+			#{airline_seat},
+			#{airline_charge},
+			#{airline_airline}
+		)
+	</insert>
+	
+	<insert id="insertTrain" parameterType="trainVO">
+		<selectKey resultType="long" keyProperty="train_no" order="BEFORE">
+			SELECT FREE_TRAIN_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO FREE_TRAIN (
+			TRAIN_NO,TRAIN_DATE,TRAIN_STARTSTATION,TRAIN_ENDSTATION,TRAIN_PRICE,
+			TRAIN_ENDDATE,TRAIN_GRADE,TRAIN_PERSON,TRAIN_RESERVE_ID
+		)
+		VALUES(
+			#{train_no},TO_DATE(#{depPlandTime2},'YYYY-MM-DD  HH24:MI:SS'),#{depPlaceId},#{arrPlaceId},#{adultcharge},
+			TO_DATE(#{arrplandtime},'YYYY-MM-DD  HH24:MI:SS'),#{traingradename},#{person},#{mem_id}
+		)
+	</insert>
+</mapper>

@@ -1,0 +1,17 @@
+package kr.or.ddit.common.product.service;
+
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.ServiceResult;
+import kr.or.ddit.vo.TestHotelVO;
+
+@Service
+public class FreeProductServiceImpl implements IFreeProductService{
+
+	@Override
+	public ServiceResult registBook(TestHotelVO hotelVO) {
+		
+		return null;
+	}
+	
+}

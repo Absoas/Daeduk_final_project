@@ -81,12 +81,6 @@
 		TRAVEL_TIP_VIEW_COUNT = TRAVEL_TIP_VIEW_COUNT + 1
 		WHERE TRAVEL_TIP_NO = #{travel_tip_no}
 	</update>
-	<update id="incrementRcmd" parameterType="long">
-		UPDATE TRAVEL_TIP_BOARD
-		SET
-		TRAVEL_TIP_RECOMMEND_COUNT = TRAVEL_TIP_RECOMMEND_COUNT + 1
-		WHERE TRAVEL_TIP_NO = #{travel_tip_no}
-	</update>
 	
 	<update id="updateBoard" parameterType="travel_tipVO">
 		UPDATE TRAVEL_TIP_BOARD
@@ -119,6 +113,53 @@
 		DELETE FROM TRAVEL_TIP_BOARD WHERE TRAVEL_TIP_NO = #{travel_tip_no}
 	</delete>
 	
+	<update id="incrementRcmd" parameterType="long">
+		UPDATE TRAVEL_TIP_BOARD
+		SET
+		TRAVEL_TIP_RECOMMEND_COUNT = TRAVEL_TIP_RECOMMEND_COUNT + 1
+		WHERE TRAVEL_TIP_NO = #{travel_tip_no}
+	</update>
+	
+	<insert id = "insertTipRcmd" parameterType="map">
+		INSERT INTO BOARD_RCMD (
+			BOARD_NO, RCMD_MEM_ID, BOARD_TYPE
+		) VALUES (
+			#{travel_tip_no}, #{authMember}, 3
+		)
+	</insert>
+	
+	<select id = "selectTipRcmd" parameterType="map" resultType="int">
+		SELECT NVL(COUNT(*), 0) FROM BOARD_RCMD
+		WHERE BOARD_NO = #{travel_tip_no}
+		AND RCMD_MEM_ID = #{authMember}
+		AND BOARD_TYPE = 3
+	</select>
+	
+	<delete id="deleteTipRcmd" parameterType="long">
+		DELETE FROM BOARD_RCMD
+		WHERE BOARD_NO = #{travel_tip_no}
+		AND BOARD_TYPE = 3
+	</delete>
+	
+	<select id = "selectTipReport" parameterType="map" resultType="int">
+		SELECT NVL(COUNT(*), 0) FROM BOARD_REPORT
+		WHERE BOARD_NO = #{travel_tip_no}
+		AND REPORT_MEM_ID = #{authMember}
+		AND BOARD_TYPE = 3
+	</select>
+	
+	<insert id = "insertTipReport" parameterType="map">
+		<selectKey resultType = "long" keyProperty="report_no" order = "BEFORE">
+         SELECT BOARD_REPORT_SEQ.NEXTVAL FROM DUAL
+      	</selectKey>
+	      INSERT INTO BOARD_REPORT(
+	         REPORT_NO, BOARD_NO, REPORT_MEM_ID,
+	         BOARD_TYPE
+	      )VALUES(
+	         #{report_no}, #{travel_tip_no}, #{authMember},
+	         3
+	      )
+	</insert>
 	
 </mapper>
 

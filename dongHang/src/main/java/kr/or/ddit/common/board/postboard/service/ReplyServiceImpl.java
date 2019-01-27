@@ -25,7 +25,8 @@ public class ReplyServiceImpl implements IReplyService {
 	public ServiceResult createReply(Review_ReplyVO reply) {
 		int rowCnt = replyDAO.insertReply(reply);
 		ServiceResult result = ServiceResult.FAILED;
-		if(rowCnt > 0) result = ServiceResult.OK;
+		if(rowCnt > 0)
+			result = ServiceResult.OK;
 		return result;
 	}
 
@@ -49,25 +50,31 @@ public class ReplyServiceImpl implements IReplyService {
 	
 	@Override
 	public ServiceResult modifyReply(Review_ReplyVO reply) {
-		// TODO Auto-generated method stub
-		return null;
+		ServiceResult result = null;
+		int rowCnt = replyDAO.updateReply(reply);
+		if (rowCnt > 0) {
+			result = ServiceResult.OK;
+		} else {
+			result = ServiceResult.FAILED;
+		}
+		return result;
 	}
 
 	@Override
 	public ServiceResult removeReply(Review_ReplyVO reply) {
-		Review_ReplyVO savedReply =  retrieveReply(reply.getReview_reply_no());
-		PersonVO savedPerson = boardDAO.selectPerson(reply.getReview_reply_mem_id());
+//		Review_ReplyVO savedReply =  retrieveReply(reply.getReview_reply_no());
+//		PersonVO savedPerson = boardDAO.selectPerson(reply.getReview_reply_mem_id());
 		ServiceResult result = null;
-		if(savedPerson.getPerson_pass().equals(reply.getReview_reply_pass())) {
+//		if(savedPerson.getPerson_pass().equals(reply.getReview_reply_pass())) {
 			int rowCnt = replyDAO.deleteReply(reply.getReview_reply_no());
 			if(rowCnt > 0) {
 				result = ServiceResult.OK;
 			}else {
 				result = ServiceResult.FAILED;
 			}
-		}else {
-			result = ServiceResult.INVALIDPASSWORD;
-		}
+//		}else {
+//			result = ServiceResult.INVALIDPASSWORD;
+//		}
 		return result;
 	}
 

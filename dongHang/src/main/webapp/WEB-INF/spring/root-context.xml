@@ -25,6 +25,20 @@
 	
 		<util:properties id="appInfo" location="classpath:kr/or/ddit/appInfo.properties" />
 	
+<!-- 	mail -->
+	 <bean id="javaMailSender" class = "org.springframework.mail.javamail.JavaMailSenderImpl">
+      <property name="host" value="smtp.gmail.com" />
+      <property name="port" value="587" />
+      <property name="username" value="sin123test@gmail.com" />
+      <property name="password" value="sintesttest" />
+      <property name="javaMailProperties">
+         <props>
+            <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.smtp.auth">true</prop>
+         </props>
+      </property>
+  	 </bean>
 </beans>
 
 

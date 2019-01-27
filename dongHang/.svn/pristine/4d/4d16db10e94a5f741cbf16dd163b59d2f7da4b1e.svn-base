@@ -1,0 +1,172 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<script>
+$(function(){
+	tBodyList = $("#tBodyList");
+	tBodyList2 = $("#tBodyList2");
+// 	getAirport();
+// 	html = "";
+	
+	$.ajax({
+			url : "${pageContext.request.contextPath}/traffic/trainInfo.do",
+			method : 'post',
+			dataType : "json",
+			data : {},
+			success : function(resp) {
+				console.log(resp);
+			},
+			error : function(resp) {
+				console.log(resp.status);
+			}
+		});
+	});
+
+	function airInfoList(resp, searchType) {
+		var dataList = resp.data;
+
+		dataList.sort(customSort);
+
+		$.each(dataList, function(idx, temp) {
+			var charge = parseInt(temp.fare) + parseInt(temp.airTax)
+					+ parseInt(temp.fuelChg);
+			html += "<tr>";
+			html += "<td>" + temp.carDesc + "</td>";
+			html += "<td>" + temp.depTime + "</td>";
+			html += "<td>" + temp.arrTime + "</td>";
+			html += "<td>" + temp.classDesc + "</td>";
+			html += "<td>" + charge + "</td>";
+			html += "<td>" + temp.seat + "석</td>";
+			html += "</tr>";
+		});
+
+		if (searchType == 'dep') {
+			tBodyList.html(html);
+		} else {
+			tBodyList2.html(html);
+		}
+	}
+
+	function customSort(a, b) {
+		var c = parseInt(a.depTime);
+		var d = parseInt(b.depTime);
+
+		if (c == d) {
+			return 0
+		}
+		return c > d ? 1 : -1;
+	}
+
+	function getAirport() {
+		var array = [ "KE", "OZ", "7C", "LJ", "TW", "ZE", "BX" ];
+
+		$.each(array, function(idx, domestic_airline) {
+			$.ajax({
+				url : "${pageContext.request.contextPath}/traffic/airDept.do",
+				method : 'post',
+				dataType : "json",
+				data : {
+					searchType : "dep",
+					airline : "KE",
+					domestic_round_way : "RT",
+					domestic_start : "GMP",
+					domestic_end : "CJU",
+					domestic_startDate : "2019.01.24",
+					domestic_endDate : "2019.01.25",
+					domestic_ea_adult : "1",
+					domestic_ea_children : "0",
+					domestic_ea_infant : "0",
+					domestic_seat : "A",
+					domestic_airline : domestic_airline
+				},
+
+				success : function(resp) {
+					console.log(resp);
+					var searchType = "dep";
+					airInfoList(resp, searchType)
+				},
+				error : function(resp) {
+					console.log(resp.status);
+				}
+			});
+
+		});
+
+		$
+				.each(
+						array,
+						function(idx, domestic_airline) {
+							$
+									.ajax({
+										url : "${pageContext.request.contextPath}/traffic/airArrive.do",
+										method : 'post',
+										dataType : "json",
+										data : {
+											searchType : "arr",
+											airline : "KE",
+											domestic_round_way : "RT",
+											domestic_start : "GMP",
+											domestic_end : "CJU",
+											domestic_startDate : "2019.01.24",
+											domestic_endDate : "2019.01.25",
+											domestic_ea_adult : "1",
+											domestic_ea_children : "0",
+											domestic_ea_infant : "0",
+											domestic_seat : "A",
+											domestic_airline : domestic_airline
+										},
+										success : function(resp) {
+											console.log(resp);
+											var searchType = "arr";
+											airInfoList(resp, searchType)
+										},
+										error : function(resp) {
+											console.log(resp.status);
+										}
+									});
+						});
+
+	}
+</script>
+
+<section class="s-content">
+	<div class="row masonry-wrap">
+		<div style="display: inline-block;" >
+		<table class="table" style="float: left; width: 48%">
+			<thead>
+				<tr>
+					<td>항공편</td>
+					<td>출발일시</td>
+					<td>도착일시</td>
+					<td>좌석</td>
+					<td>기준요금</td>
+					<td>좌석수</td>
+				</tr>
+			</thead>
+			
+			<tbody id="tBodyList" style="overflow: scroll;  height:200px; ">
+				
+			</tbody>
+			
+		</table>
+		
+		<table class="table"  style="float: right; width: 48% ">
+			<thead>
+				<tr>
+					<td>항공편</td>
+					<td>출발일시</td>
+					<td>도착일시</td>
+					<td>좌석</td>
+					<td>기준요금</td>
+					<td>좌석수</td>
+				</tr>
+			</thead>
+			
+			<tbody id="tBodyList2" style="overflow: scroll;  height:200px; ">
+				
+			</tbody>
+		</table>
+	</div>
+		
+	</div>
+</section>

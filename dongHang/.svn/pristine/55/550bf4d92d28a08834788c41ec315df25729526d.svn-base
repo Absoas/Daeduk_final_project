@@ -1,0 +1,152 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<SCRIPT type="text/javascript">
+	
+	$(function() {
+	     $('#datetimepicker1').datetimepicker();
+	     
+		var selectDept = $('[name="selectDept"]');
+		var selectArr = $('[name="selectArr"]');
+		selectDept.on("change",function() {
+			dept = $("select[name='selectDept']").val();
+			arr = $("select[name='selectArr']").val();
+			
+			if(dept == arr){
+				alert('중복된 도시는 선택 불가합니다.');
+			}
+		});
+	
+		selectArr.on("change",function() {
+			dept = $("select[name='selectDept']").val();
+			arr = $("select[name='selectArr']").val();
+			
+			if(dept == arr){
+				alert('중복된 도시는 선택 불가합니다.');
+			}
+		});
+	
+		
+		$('#selectForm').on('submit', function(event){
+			var localCode = $('[name="selectLocal"]').val();
+		    if(localCode == ''){
+		    	alert("지역을 선택하세요");
+				event.preventDefault();
+		    	return;
+		    }
+		    
+		    var personnel = $('[name="personnel"]').val();
+		    
+		    if(0 >= personnel  || personnel > 20){
+		    	alert("인원 확인!");
+				event.preventDefault();
+		    	return;
+		    }
+		    
+		});
+	    
+	})	
+	
+	
+</SCRIPT>
+
+<section
+	class="s-content s-content--narrow s-content--no-padding-bottom">
+
+	<article class="row format-standard">
+
+		<div class="s-content__header col-full">
+			<h1 class="s-content__header-title">자유여행 </h1>
+			<p>나만의 여행을 만들어 보세요</p>
+			
+		</div>
+		<!-- end s-content__header -->
+
+<!-- 		<div class="s-content__media col-full"> -->
+<!-- 			<div class="s-content__post-thumb">메인 이미지 태그</div> -->
+<!-- 		</div> -->
+		<!-- end s-content__media -->
+
+		<div class="col-full s-content__main">
+			<form action="" id="selectForm" method="post">
+				<table>
+					<tr>
+						<th>출발 날짜</th>
+						<td>
+						<div class="container">
+						    <div class="row">
+						        <div class='col-sm-6'>
+						            <div class="form-group">
+						                <div class='input-group date' id='datetimepicker1'>
+						                    <input type='text' class="form-control" />
+						                    <span class="input-group-addon">
+						                        <span class="glyphicon glyphicon-calendar"></span>
+						                    </span>
+						                </div>
+						            </div>
+						        </div>
+						    </div>
+						</div>
+						
+						</td>
+					</tr>
+					<tr>
+						<th>도착 날짜</th>
+						<td><input type="date" name="endDate"></td>
+					</tr>
+					
+					<tr>
+						<th>출발 도시</th>
+						<td>
+							<select name="selectDept" id="selectDept">
+								<OPTION value="">지역을 선택하세요</OPTION>
+								<OPTION value="1">서울</OPTION>
+								<OPTION value="2">인천</OPTION>
+								<OPTION value="3">대전</OPTION>
+								<OPTION value="4">대구</OPTION>
+								<OPTION value="5">광주</OPTION>
+								<OPTION value="6">부산</OPTION>
+								<OPTION value="7">울산</OPTION>
+								<OPTION value="8">세종</OPTION>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>도착 도시</th>
+						<td>
+							<select name="selectArr" id="selectArr">
+								<OPTION value="">지역을 선택하세요</OPTION>
+								<OPTION value="1">서울</OPTION>
+								<OPTION value="2">인천</OPTION>
+								<OPTION value="3">대전</OPTION>
+								<OPTION value="4">대구</OPTION>
+								<OPTION value="5">광주</OPTION>
+								<OPTION value="6">부산</OPTION>
+								<OPTION value="7">울산</OPTION>
+								<OPTION value="8">세종</OPTION>
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<th>여행인원 선택</th>
+						<td>
+							성인<input type="number" name="adult" value="1" min="1" max="20">(최대 20명)<br>
+							어린이<input type="number" name="children" value="1" min="1" max="20">(최대 20명)<br>
+						</td>
+					</tr>
+					
+					<tr>
+						<th>교통편 선택</th>
+						<td>
+							비행기<input type="radio" name="traffic" value="airplain"><br>
+							기차 <input type="radio" name="traffic" value="train"><br>
+						</td>
+					</tr>
+				</table>
+				<input type="submit" value="다음" >
+			</form>
+		</div>
+		<!-- end s-content__main -->
+
+	</article>
+</section>

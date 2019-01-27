@@ -1,0 +1,33 @@
+package kr.or.ddit.api.travel.dao;
+
+import org.springframework.stereotype.Repository;
+
+import kr.or.ddit.vo.TrainVO;
+
+@Repository
+public interface ITravelDAO {
+	public int insertTrain(TrainVO train);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

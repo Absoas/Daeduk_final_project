@@ -61,6 +61,8 @@ public class SuggestboardRetrieveController {
 		
 		List<SuggestBoardVO> boardList = service.suggestList(pagingVO);
 		pagingVO.setDataList(boardList);
+		
+		System.out.println(pagingVO.getDataList());
 		return pagingVO;
 	}
 	
@@ -76,7 +78,6 @@ public class SuggestboardRetrieveController {
 		PagingInfoVO<SuggestBoardVO> pagingVO = getProcess(currentPage, searchType, searchWord);
 		model.addAttribute("pagingVO", pagingVO);
 		return "common/board/suggestboard/suggestboardList";
-		
 	}
 	
 

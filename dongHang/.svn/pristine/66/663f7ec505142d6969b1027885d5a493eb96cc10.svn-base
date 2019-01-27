@@ -1,0 +1,26 @@
+package kr.or.ddit.api.travel.service;
+
+import kr.or.ddit.ServiceResult;
+import kr.or.ddit.vo.TrainVO;
+
+public interface ITravelService {
+	public ServiceResult createTrain(TrainVO train);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

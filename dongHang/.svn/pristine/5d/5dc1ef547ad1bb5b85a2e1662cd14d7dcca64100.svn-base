@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<section class="s-content">
+
+<c:choose>
+	<c:when test="${authMember.person_type eq '1' }">
+		<span><a href="${pageContext.request.contextPath }/member/mypage/myInfo.do">내정보</a></span>
+	</c:when>
+	<c:when test="${authMember.person_type eq '2' }">
+		<span><a href="${pageContext.request.contextPath }/common/mypage/corporationViewInfo.do">내정보</a></span>
+	</c:when>
+</c:choose>
+<br/>
+<span><a href="${pageContext.request.contextPath }/member/mypage/scheduleList.do">내 일정보기</a></span>
+</section>

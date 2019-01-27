@@ -19,7 +19,6 @@ function makeList(data){
 		var boardList = data.dataList;
 		var navTag = $('#navtag');
 		var bodyTag = $('#bodyList');
-		
 		if(boardList){
 			$.each(boardList, function(i, board){
 				var testArray = regex.exec(board.board_title);
@@ -31,11 +30,9 @@ function makeList(data){
 				body+="<tr><td>"+board.suggest_board_no+"</td>";
 				body+="<td>"+board.suggest_board_title+"</td>";
 				$.each(board.personList,function(i, person){
-					body+="<td>"+person.person_name+"("+person.person_id+")</td>";
+					body+="<td>"+person.person_name+"("+board.mem_id+")</td>";
 				});
 				body+="<td>"+board.suggest_board_date+"</td></tr>";				
-				
-				
 			})
 		}else{
 			body+="<tr><td colspan='4'>게시글 없음</td></tr>";
@@ -101,7 +98,7 @@ function makeList(data){
 								<td>${suggest.suggest_board_no }</td>
 								<td>${suggest.suggest_board_title }</td>
 						<c:forEach items="${suggest.personList }" var="person">
-								<td>${person.person_name }(${person.person_id})</td>
+								<td>${person.person_name }(${suggest.mem_id})</td>
 								<td>${suggest.suggest_board_date }</td>
 						</c:forEach>		
 							</tr>
@@ -123,7 +120,7 @@ function makeList(data){
 						<form action="<c:url value="/suggest/suggestList.do"/>" name="searchForm">
 							<input type="hidden" name="page" /> <select class="text-center"
 								name="searchType">
-								<option value="">검색 조건</option>
+								<option value="">전체</option>
 								<option value="mem_id">작성자ID</option>
 								<option value="title">제목</option>
 								<option value="content">내용</option>

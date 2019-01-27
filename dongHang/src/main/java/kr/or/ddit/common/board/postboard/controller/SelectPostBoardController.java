@@ -11,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.or.ddit.ServiceResult;
 import kr.or.ddit.common.board.postboard.service.IBoardService;
 import kr.or.ddit.vo.ReviewVO;
 import kr.or.ddit.vo.PagingInfoVO;
@@ -89,6 +91,28 @@ public class SelectPostBoardController {
 		model.addAttribute("review", review);
 		
 		return "common/board/postboard/postboardView";
+	}
+	
+	@RequestMapping("postboardReport.do")
+	public String getReport(
+			@RequestParam(name = "what", required = true) long review_no,
+			@RequestParam(name = "auth", required = true) String authMember,
+			RedirectAttributes redirectAttributes
+	){
+		ServiceResult result = service.reportBoard(review_no, authMember);
+		String viewName = null;
+		switch(result){
+		case OK:
+			viewName = "redirect:/postboard/postboardView.do?what=" + review_no;
+			redirectAttributes.addFlashAttribute("message", review_no + "번 글을 신고하였습니다.");
+			break;
+		
+		default:
+			viewName = "redirect:/postboard/postboardView.do?what=" + review_no;
+			redirectAttributes.addFlashAttribute("message", "이미 신고를 하셨습니다.");
+			break;
+		}
+		return viewName;
 	}
 	
 }

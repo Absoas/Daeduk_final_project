@@ -1,135 +1,172 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    
-    
-  <!-- pageheader
-    ================================================== -->
-    <section class="s-pageheader s-pageheader--home">
 
-        <header class="header">
-            <div class="header__content row">
+<script type="text/javascript" src="<c:url value='/js/replyProcess2.js' />"></script>
+<script type="text/javascript">
+	$.getContextPath = function(){
+		return "${pageContext.request.contextPath}";
+	}
+	
+	
+	function deleteFunc(review_no){
+		var review_pass = prompt("비밀번호 입력");
+		if(!review_pass) return;
+		document.deleteForm.review_pass.value=review_pass;
+		document.deleteForm.submit();
+	}
+	function aFunc(review_no){
+		document.deleteForm.submit();
+	}
+	<c:if test="${not empty message}">
+		alert("${message}");
+	</c:if>
+	
+</script>
 
-                <div class="header__logo">
-                    <a class="logo" href="<c:url value="/"/>">
-                        <img src="${pageContext.request.contextPath}/images/logo.svg" alt="Homepage">
-                    </a>
-                </div> <!-- end header__logo -->
-             
-<!--                 로그인 -->
-                <ul class="header__login">
-                    <li>
-                     <c:if test="${empty authMember}">
-<%--                               <button style="background:url('images/login.png')" value="회원" onclick="location.href='${pageContext.request.contextPath}/login/loginCheck.do'"></button> --%>
-                        	<a onclick="location.href='${pageContext.request.contextPath}/login/loginCheck.do'">
-                        		<img style="width: 30px; height: 30px;" src="${pageContext.request.contextPath}/images/login.png" />
-                        	</a>
-                        
-                         </c:if>
-                         
-                         <c:if test="${not empty authMember}">
-                            <c:if test="${authMember.person_type eq 1}">
-                            </c:if>
-                              <a href="</a><c:url value="/member/mypage.do"/>">${authMember.person_name}</a><span style="font-size: 15px;">님 안녕하세요</span> 
-                            <a href="<c:url value="/login/logout.do"/>">
-                        		<img style="width: 30px; height: 30px;" src="${pageContext.request.contextPath}/images/login.png" />
-                        	</a>
-<%--                             <a href="<c:url value="/login/logout.do"/>">로그아웃</a>  --%>
-                         </c:if>
-                  </li>
-                  
-                  <li>    
-                    </li>
-                </ul> 
-                
-                            
-<!--                 기업 회원 -->
-                <ul class="header__social">
-                    <li>
-                       <c:if test="${not empty authMember}">
-                         <c:if test="${authMember.person_type eq 2}">
-<%--                              <button style="background-image:url('images/company.png'); " value="기업" onclick="location.href='${pageContext.request.contextPath}/cor/mainPage.do'"></button> --%>
-                            <a onclick="location.href='${pageContext.request.contextPath}/cor/mainPage.do'">
-                        		<img style="width: 40px; height: 40px; border: 3px solid white; border-radius: 50px; " src="${pageContext.request.contextPath}/images/admin.png" />
-                        	</a>                           
-                           </c:if>
-                         </c:if>
-                    </li>
-                    
-                    <li>
-                          <c:if test="${not empty authMember}">
-                         <c:if test="${authMember.person_type eq 3}">
-<%--                               <button  style="background-color: blue;" value="관리자" onclick="location.href='${pageContext.request.contextPath}/admin/mainPage.do'"></button> --%>
-                            <a onclick="location.href='${pageContext.request.contextPath}/admin/mainPage.do'">
-                        		<img style="width: 40px; height: 40px; border: 3px solid white; border-radius: 50px; " src="${pageContext.request.contextPath}/images/company.png" />
-                        	</a>  
-                           </c:if>
-                         </c:if>
-                    </li>
-                    
-                   
-                </ul> <!-- end header__social -->
-                
-                
-                <a class="header__search-trigger" href="#0"></a>
+<section class="s-content s-content--narrow s-content--no-padding-bottom">
+<article class="row format-gallery">
+	<div class="s-content__header col-full">
+	<form name="deleteForm" action="<c:url value='/postboard/postboardDelete.do' />" method="post">
+		<input type="hidden" name="review_no" value="${review.review_no }" />
+		<input type="hidden" name="review_pass" />
+		<input type="hidden" name="review_mem_id" value="${authMember.person_id}"/>
+	</form>
+	<h1 class="s-content__header-title">
+		${review.review_title}
+	</h1>
+	<ul class="s-content__header-meta">
+		<li class="date">${review.review_date}</li>
+		<li class="cat">
+			<a>조회수 : ${review.review_view_count}</a>
+			<a>추천수 : ${review.review_recommend_count}</a>
+			첨부파일 :
+			<c:forEach items="${review.pdsList }" var="pds" varStatus="vs">
+				<c:url value="/postboard/postboardDownload.do" var="downloadURL">
+					<c:param name="what" value="${pds.review_file_no }" />
+				</c:url>
+				<a href="${downloadURL }">${pds.review_file_name }</a>
+				<c:if test="${not vs.last }">&nbsp;|&nbsp;</c:if>
+			</c:forEach>
+		</li>
+	</ul>
+	</div>
+	<div class="col-full s-content__main">
+		<p>${review.review_content}</p>
+		<div class="s-content__author">
+                   <img src="${pageContext.request.contextPath}/boardImages/I.jpg" alt="">
 
-                <div class="header__search">
+                   <div class="s-content__author-about">
+                       <h4 class="s-content__author-name">
+                           <a href="#0">${review.review_mem_id}</a>
+                       </h4>
+                       <p>개인의 소개말을 기입.</p>
+                       <ul class="s-content__author-social">
+                          <li>Facebook</li>
+                          <li>Instagram</li>
+                          <li>Google</li>
+                          <li>Naver</li>
+                       </ul>
+                   </div>
+   		</div>
+    </div>
+    			<c:url value="/postboard/postboardUpdate.do" var="updateURL">
+					<c:param name="what" value="${review.review_no }" />
+				</c:url>
+				<input type="button" value="수정" 
+					onclick="location.href='${updateURL}';"
+				/>
+				
+				<input type="button" value="삭제" 
+					onclick="deleteFunc(${review.review_no});"
+				/>
+				<c:url value="/postboard/postboardInsert.do" var="insertURL">
+					<c:param name="parent" value="${review.review_no }"/>
+				</c:url>
+				
+				<c:url value="/postboard/postboardRcmd.do" var="rcmdURL">
+					<c:param name="what" value="${review.review_no }" />
+				</c:url>
+				<input type="button" value="추천하기" 
+					onclick="location.href='${rcmdURL}';"
+				/>
+				
+</article>
+	<div class="comments-wrap">
+	 <div id="comments" class="row">
+   	  <div class="col-full">
+     		<h3 class="h2"> COMMENTS  </h3>
+		     	<ol class="commentlist">
+		     		<li class="depth-1 comment">
+		     			<div id="listBody"></div>
+		     		</li>
+		     	</ol>
+		     	<div class="respond">
+				<h3 class="h1">Add Comment</h3>
+					<form name="replyForm" method="post" action='<c:url value="/postboard/replyInsert.do" />'>
+						<fieldset>
+						<input type="hidden" name="board_reply_no" />
+						<input type="hidden" name="board_reply_pass" />
+						<input type="hidden" name="board_no" value="${board.board_no }" />
+						<div class="form-field">
+						작성자 :<input type="text" name="board_reply_mem_id" class="full-width" placeholder="작성자 ID" value="${authMember.person_id}" readonly="readonly"/>
+						</div>
+						내용 : <textarea name="board_reply_content" class="full-width" placeholder="작성내용을 입력하세요."></textarea>
+						<input type="submit" value="등록" class="submit btn--primary btn--large full-width"/>
+						</fieldset>
+					</form>
+				</div>
+	    	</div>
+		</div>
+	</div>
 
-                    <form role="search" method="get" class="header__search-form" action="#">
-                        <label>
-                            <span class="hide-content">Search for:</span>
-                            <input type="search" class="search-field" placeholder="Type Keywords" value="" name="s" title="Search for:" autocomplete="off">
-                        </label>
-                        <input type="submit" class="search-submit" value="Search">
-                    </form>
-        
-                    <a href="#0" title="Close Search" class="header__overlay-close">Close</a>
+	<table class="table">
+		<tr>
+			<td colspan="2">
+				
+			</td>
+		</tr>
+	</table>
+	
+</section>
+	
 
-                </div>  <!-- end header__search -->
+<!-- Modal -->
 
-                <a class="header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
 
-                <nav class="header__nav-wrap">
+<div class="modal fade" id="replyDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <span aria-hidden="true">삭제하시려면 비밀번호를 입력하세요 :</span>
+      </div>
+      <div class="modal-reviewdy">
+      	<form onsubmit="return false;" id="modalForm">
+      		<input type="hidden" id="review_no" value="${review.review_no }"/>
+      		<input type="hidden" id="review_reply_mem_id"/>
+      		<input type="hidden" id="review_reply_no" />
+        	<input type="text" id="review_reply_pass" />
+        </form>	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" id="modalBtn">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-                    <h2 class="header__nav-heading h6">Site Navigation</h2>
 
-                    <ul class="header__nav">
-                        <li class="current"><a href="<c:url value="/"/>" title="">Home</a></li>
-                        <li class="has-children">
-                            <a href="#0" title="">여행상품</a>
-                            <ul class="sub-menu">
-                            <li><a href="<c:url value="/package/packageRetrieve.do"/>">패키지상품</a></li>
-                            <li><a href="<c:url value="/free/freeRetrieve.do"/>">자유상품</a></li>
-                            </ul>
-                        </li>
-                        
-                        <li class="has-children">
-                            <a href="#0" title="">크루</a>
-                            <ul class="sub-menu">
-                               <li><a href="<c:url value = "/crew/introboardList.do"/>">크루 소개 게시판</a></li>
-                               <li><a href="single-audio.html">Audio Post</a></li>
-                            </ul>
-                        </li>
-                    
-                        <li class="has-children">
-                           <a href="style-guide.html" title="">커뮤니티</a>
-                             <ul class="sub-menu">
-                                   <li><a href="<c:url value="/tipboard/tipboardRetrieve.do"/>">여행팁 게시판</a></li>
-                                   <li><a href="<c:url value="/festival/festivalRetrieve.do"/>">축제정보 게시판</a></li>
-                                   <li><a href=" <c:url value="/freeboard/freeboardRetrieve.do"/>">자유게시판</a></li>
-                                   <li><a href="<c:url value="/postboard/postboardRetrieve.do"/>">후기게시판</a></li>
-                                   <li><a href="<c:url value="/common/mypage/viewInfo.do"/>">마이페이지</a></li>
-                             </ul>
-                        </li>
-                        
-                        <li><a href="<c:url value="/eventboard/eventboardRetrieve.do"/>" title="">Event</a></li>
-                        <li><a href="<c:url value="/common/customerCenter/customer.do"/>" title="">고객센터</a></li>
-<!--                         /suggest/suggestList.do -->
-                    </ul> <!-- end header__nav -->
-                    
-                    <a href="#0" title="Close Menu" class="header__overlay-close close-mobile-menu">Close</a>
-                </nav>
-            </div> 
-        </header> 
-    </section> 
-    
+<script type="text/javascript">
+function paging(page){
+	pagingReply(page, ${review.review_no});
+	}
+</script> 
+
+
+
+
+
+
+
+

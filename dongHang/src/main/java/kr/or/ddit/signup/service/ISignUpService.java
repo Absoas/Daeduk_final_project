@@ -1,5 +1,6 @@
 package kr.or.ddit.signup.service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -15,9 +16,14 @@ public interface ISignUpService {
 	 * 회원 신규 등록
 	 * @param member
 	 * @return PKDUPLICATED, OK, FAILED
+	 * @throws NoSuchAlgorithmException 
 	 */
 	public ServiceResult createMember(MemberVO member);
+	
 	public ServiceResult createCorp(CorporationVO corp);
+	
+	
+	public boolean idCheck(String mem_id);
 	
 	public long retrieveMemberCount(PagingInfoVO pagingVO);
 	

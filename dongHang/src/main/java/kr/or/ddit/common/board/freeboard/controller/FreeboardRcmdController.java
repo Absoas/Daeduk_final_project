@@ -16,9 +16,11 @@ public class FreeboardRcmdController {
 	IFreeboardService service;
 
 	@RequestMapping(value = "/freeboard/freeboardRcmd.do")
-	public String process(@RequestParam(name = "what", required = true) long board_no,
+	public String process(
+			@RequestParam(name = "what", required = true) long board_no,
 			@RequestParam(name = "auth", required=true) String authMember,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes
+		) {
 		ServiceResult result = service.rcmdBoard(board_no, authMember);
 		String viewName = null;
 		switch (result) {

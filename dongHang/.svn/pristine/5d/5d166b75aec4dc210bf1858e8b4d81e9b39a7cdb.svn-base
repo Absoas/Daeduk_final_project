@@ -1,0 +1,13 @@
+package kr.or.ddit.member.surveyEvaluation.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class SurveyEvaluationRetrieveController {
+	
+	@RequestMapping("/member/surveyEvaluationList.do")
+	public String process(){
+		return "member/surveyEvaluation/surveyList";
+	}
+}

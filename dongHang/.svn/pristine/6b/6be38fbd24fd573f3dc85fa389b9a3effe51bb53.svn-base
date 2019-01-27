@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.member.surveyEvaluation.dao.ISurveyEvaluationDAO">
+	
+<!-- 	//선택한 설문조사 상세 조회 -->
+<!-- 	public List<Survey_EvaluationVO> selectSurveyEvaluation(long  evaluation_no); -->
+	
+<!-- 	//설문조사 참가 -->
+<!-- 	public int insertSurveyEvaluation(Survey_EvaluationVO surveyEvalVO); -->
+	
+	<sql id="searchFrag">
+		<trim prefix=" WHERE " suffixOverrides=" AND|OR ">
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchVO.company_id)">
+					COMPANY_ID LIKE '%'||#{searchVO.COMPANY_ID}||'%' OR
+				</if>
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchVO.survey_title)">
+					SURVEY_TITLE LIKE '%'||#{searchVO.SURVEY_TITLE}||'%' OR
+				</if>
+		</trim>
+	</sql>
+	
+	<sql id="searchTotalRecordFrag">
+		<trim prefix=" WHERE " suffixOverrides=" AND|OR ">
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchVO.person_name)">
+					p.PERSON_NAME LIKE '%'||#{searchVO.PERSON_NAME}||'%' OR
+				</if>
+				<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchVO.survey_title)">
+					s.SURVEY_TITLE LIKE '%'||#{searchVO.SURVEY_TITLE}||'%' OR
+				</if>
+		</trim>
+	</sql>
+	
+	<select id = "selectTotalRecord" parameterType="pagingVO" resultType="long">
+		SELECT NVL(COUNT(*), 0)
+		FROM SURVEY s, PERSON p
+		<include refid="searchTotalRecordFrag"/>
+   </select>
+   
+   <select id="selectSurveyEvaluationList" parameterType="pagingVO" resultType="surveyVO">
+   		SELECT B.*
+		FROM (
+            SELECT ROWNUM RNUM, A.*
+                FROM (
+                    SELECT SURVEY_NO, COMPANY_ID,
+                           SURVEY_TITLE, SURVEY_DATE,
+                           SURVEY_END_DATE
+                    FROM SURVEY
+                   <include refid="searchFrag" />
+                    ORDER BY SURVEY_NO DESC
+                ) A ) B
+            WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+   </select>
+	
+	<select id = "selectSurveyEvaluation" parameterType="surveyVO" resultType="surveyVO">
+		SELECT DISTINCT s.SURVEY_NO, s.SURVEY_TITLE, s.COMPANY_ID,
+			   s.SURVEY_DATE, s.SURVEY_END_DATE, e.EVALUATION_COUNT
+		FROM SURVEY s, SURVEY_EVALUATION e
+		WHERE s.SURVEY_NO = e.SURVEY_NO
+		AND s.COMPANY_ID = #{company_id}
+		AND s.survey_no = #{survey_no}
+	</select>
+	
+	<select id = "SurveyEvaluationList" parameterType="long" resultType="survey_evaluationVO">
+		SELECT EVALUATION_CONTENT
+		FROM SURVEY_EVALUATION
+		WHERE SURVEY_NO = #{survey_no}
+	</select>
+</mapper>

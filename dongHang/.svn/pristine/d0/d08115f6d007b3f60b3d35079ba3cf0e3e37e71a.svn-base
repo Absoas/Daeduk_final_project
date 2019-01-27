@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<section class="s-content">
+
+<c:url value = "/member/mypage/myInfo.do" var="myInfomation">
+	<c:param name="what" value = "${authMember.person_id }"/>
+</c:url>
+
+<span><a href="${myInfomation }">내 정보</a></span>
+<br/>
+<span><a href="${pageContext.request.contextPath }/member/mypage/scheduleList.do">내 일정보기</a></span>
+</section>

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import kr.or.ddit.ServiceResult;
-import kr.or.ddit.common.board.noticeboard.service.INoticeboardService;
+import kr.or.ddit.common.board.noticeboard.servaice.INoticeboardService;
 import kr.or.ddit.validate.InsertGroup;
 import kr.or.ddit.vo.NoticeboardVO;
 

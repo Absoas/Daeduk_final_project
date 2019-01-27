@@ -69,4 +69,13 @@ public class CorManagementListController {
 		return "admin/corManage/corManagementList";
 	}
 	
+	@RequestMapping("/admin/corManagementView.do")
+	public String viewProcess(
+			@RequestParam(name="what", required=true) String company_id,
+			Model model
+			){
+		CorporationVO cor = service.retrieveCorManagement(company_id);
+		model.addAttribute("cor", cor);
+		return "admin/corManage/corManagementView";
+	}
 }

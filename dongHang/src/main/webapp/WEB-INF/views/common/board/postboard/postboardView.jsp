@@ -1,155 +1,194 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
-<script type="text/javascript" src="<c:url value='/js/replyProcess2.js' />"></script>
+<script type="text/javascript" src="<c:url value='/js/postReplyProcess.js' />"></script>
 <script type="text/javascript">
-	$.getContextPath = function(){
-		return "${pageContext.request.contextPath}";
-	}
-	
-	function deleteFunc(review_no){
-		var review_pass = prompt("비밀번호 입력");
-		if(!review_pass) return;
-		document.deleteForm.review_pass.value=review_pass;
-		document.deleteForm.submit();
-	}
-	function aFunc(review_no){
-		document.deleteForm.submit();
-	}
-	<c:if test="${not empty message}">
-		alert("${message}");
+	<c:if test="${not empty person.per_img }">
+	$.getImage = function(){ 	
+	    return "data:image/*;base64,${person.per_imgToBase64}";
+		}
 	</c:if>
 	
+	<c:if test="${empty person.per_img}">
+	$.getImage = function(){ 	
+	    return "${cPath}/images/sample-image.jpg";
+		}
+	</c:if>
+
+	$.getAuthMember = function(){
+    return "${authMember.person_id}";
+ }
+   $.getContextPath = function(){
+      return "${pageContext.request.contextPath}";
+   }
+   
+   
+   function deleteFunc(review_no){
+      if (confirm("게시글을 삭제하시겠습니까?") == true) {
+    	  document.deleteForm.submit();
+  	} else {
+  		return;
+  	}
+      
+   }
+   
+	function replyUpfunc(reply_no){
+	if (confirm("댓글을 수정하시겠습니까?") == true) {
+		$("#replyUpdateModal").find("#review_reply_no").val(reply_no);
+		$("#replyUpdateModal").modal("show");
+	} else {
+		return;
+	}
+}
+
+ function replyDelfunc(reply_no){
+	if (confirm("댓글을 삭제하시겠습니까?") == true) {
+		var action = replyForm.attr("action");
+		replyForm.attr("action", "${pageContext.request.contextPath}/postboard/replyDelete.do");
+		replyForm.find("[name='review_reply_no']").val(reply_no);
+		replyForm.submit();
+		replyForm.attr("action", action);
+		replyForm[0].reset();
+	} else {
+		return;
+	}
+}
+
+   
+   <c:if test="${not empty message}">
+      alert("${message}");
+   </c:if>
+   
 </script>
 
 <section class="s-content s-content--narrow s-content--no-padding-bottom">
 <article class="row format-gallery">
-	<div class="s-content__header col-full">
-	<form name="deleteForm" action="<c:url value='/postboard/postboardDelete.do' />" method="post">
-		<input type="hidden" name="review_no" value="${review.review_no }" />
-		<input type="hidden" name="review_pass" />
-		<input type="hidden" name="review_mem_id" value="${authMember.person_id}"/>
-	</form>
-	<h1 class="s-content__header-title">
-		${review.review_title}
-	</h1>
-	<ul class="s-content__header-meta">
-		<li class="date">${review.review_date}</li>
-		<li class="cat">
-			<a>조회수 : ${review.review_view_count}</a>
-			<a>추천수 : ${review.review_recommend_count}</a>
-			첨부파일 :
-			<c:forEach items="${review.pdsList }" var="pds" varStatus="vs">
-				<c:url value="/postboard/postboardDownload.do" var="downloadURL">
-					<c:param name="what" value="${pds.review_file_no }" />
-				</c:url>
-				<a href="${downloadURL }">${pds.review_file_name }</a>
-				<c:if test="${not vs.last }">&nbsp;|&nbsp;</c:if>
-			</c:forEach>
-		</li>
-	</ul>
-	</div>
-	<div class="col-full s-content__main">
-		<p>${review.review_content}</p>
-		<div class="s-content__author">
-                   <img src="${pageContext.request.contextPath}/boardImages/I.jpg" alt="">
+   <div class="s-content__header col-full">
+   <form name="deleteForm" action="<c:url value='/postboard/postboardDelete.do' />" method="post">
+      <input type="hidden" name="review_no" value="${review.review_no }" />
+      <input type="hidden" name="review_pass" />
+      <input type="hidden" name="review_mem_id" value="${authMember.person_id}"/>
+   </form>
+   <div class="board_header">
+      <div class="h5_date"><h5>&#91;후기게시판&#93;${review.review_title}</h5> ${review.review_date}</div>
+   </div>
+   <div style="text-align: left;">${review.review_mem_id}</div>
+      <div class="col-full s-content__main">
+      <p>${review.review_content}</p></div>
+<!--             <div class="s-content__author"> -->
+<%--                    <img src="${pageContext.request.contextPath}/boardImages/I.jpg" alt=""> --%>
 
-                   <div class="s-content__author-about">
-                       <h4 class="s-content__author-name">
-                           <a href="#0">${review.review_mem_id}</a>
-                       </h4>
-                       <p>개인의 소개말을 기입.</p>
-                       <ul class="s-content__author-social">
-                          <li>Facebook</li>
-                          <li>Instagram</li>
-                          <li>Google</li>
-                          <li>Naver</li>
-                       </ul>
-                   </div>
-   		</div>
-    </div>
-    			<c:url value="/postboard/postboardUpdate.do" var="updateURL">
-					<c:param name="what" value="${review.review_no }" />
-				</c:url>
-				<input type="button" value="수정" 
-					onclick="location.href='${updateURL}';"
-				/>
-				
-				<input type="button" value="삭제" 
-					onclick="deleteFunc(${review.review_no});"
-				/>
-				<c:url value="/postboard/postboardInsert.do" var="insertURL">
-					<c:param name="parent" value="${review.review_no }"/>
-				</c:url>
-				
-				<c:url value="/postboard/postboardRcmd.do" var="rcmdURL">
-					<c:param name="what" value="${review.review_no }" />
-				</c:url>
-				<input type="button" value="추천하기" 
-					onclick="location.href='${rcmdURL}';"
-				/>
-				
+<!--          </div> -->
+      <div class="board_plus">
+         <a>조회수 : ${review.review_view_count}</a>
+         <a>추천수 : ${review.review_recommend_count}</a>
+         첨부파일 :
+         <c:forEach items="${review.pdsList }" var="pds" varStatus="vs">
+            <c:url value="/postboard/postboardDownload.do" var="downloadURL">
+               <c:param name="what" value="${pds.review_file_no }" />
+            </c:url>
+            <a href="${downloadURL }">${pds.review_file_name }</a>
+            <c:if test="${not vs.last }">&nbsp;|&nbsp;</c:if>
+         </c:forEach>
+         </div>
+   </div>
+
+
+
+             <c:url value="/postboard/postboardUpdate.do" var="updateURL">
+               <c:param name="what" value="${review.review_no }" />
+            </c:url>
+            <c:if test="${authMember.person_id eq review.review_mem_id}">
+	            <br><span style="padding-top: 5px; padding-left: 27px;" class="upnde_btn2" onclick="location.href='${updateURL}';"><i class='far far fa-edit'> 수정</i></span>
+	<!--             <input type="button" value="수정"  -->
+	<%--                onclick="location.href='${updateURL}';" --%>
+	<!--             /> -->
+			</c:if>
+			
+			<c:if test="${authMember.person_id eq review.review_mem_id}">
+	            <span style=" padding-left: 27px;" class="upnde_btn2" onclick="deleteFunc(${review.review_no});"><i class='far fa-trash-alt'></i> 삭제</span>
+	<!--             <input type="button" value="삭제"  -->
+	<%--                onclick="deleteFunc(${review.review_no});" --%>
+	<!--             /> -->
+			</c:if>
+            <c:url value="/postboard/postboardInsert.do" var="insertURL">
+               <c:param name="parent" value="${review.review_no }"/>
+            </c:url>
+            
+            <c:url value="/postboard/postboardRcmd.do" var="rcmdURL">
+               <c:param name="what" value="${review.review_no }" />
+            </c:url>
+            
+            <c:url value="/postboard/postboardReport.do" var = "reportURL">
+				<c:param name="what" value = "${review.review_no }"/>
+				<c:param name = "auth" value = "${authMember.person_id }"/>
+			</c:url>
+            
+            <c:if test = "${not empty authMember.person_id }">
+            <div style=" padding-left: 18px;" class="board_good" onclick="location.href='${reportURL}';"><i class="fas fa-bullhorn">신고하기</i></div>
+            <div style=" padding-left: 25px;" class="board_good" onclick="location.href='${rcmdURL}';"><i class="far fa-thumbs-up">좋아요</i></div>
+<!--             <input type="button" value="추천하기"  -->
+<%--                onclick="location.href='${rcmdURL}';" --%>
+			</c:if>
+            
+            
 </article>
 	<div class="comments-wrap">
-	 <div id="comments" class="row">
-   	  <div class="col-full">
-     		<h3 class="h2"> COMMENTS  </h3>
-		     	<ol class="commentlist">
-		     		<li class="depth-1 comment">
-		     			<div id="listBody"></div>
-		     		</li>
-		     	</ol>
-		     	<div class="respond">
-				<h3 class="h1">Add Comment</h3>
-					<form name="replyForm" method="post" action='<c:url value="/postboard/replyInsert.do" />'>
+		<div id="comments" class="row">
+			<div class="col-full">
+				<ol class="commentlist">
+<!-- 					<li class="depth-1 comment"> -->
+						<div id="listBody"></div>
+<!-- 					</li> -->
+				</ol>
+				<div class="respond">
+					<form name="replyForm" method="post"
+						action='<c:url value="/postboard/replyInsert.do" />'>
 						<fieldset>
-						<input type="hidden" name="board_reply_no" />
-						<input type="hidden" name="board_reply_pass" />
-						<input type="hidden" name="board_no" value="${board.board_no }" />
-						<div class="form-field">
-						작성자 :<input type="text" name="board_reply_mem_id" class="full-width" placeholder="작성자 ID" value="${authMember.person_id}" readonly="readonly"/>
-						</div>
-						내용 : <textarea name="board_reply_content" class="full-width" placeholder="작성내용을 입력하세요."></textarea>
-						<input type="submit" value="등록" class="submit btn--primary btn--large full-width"/>
+							<input type="hidden" name="review_reply_no" /> 
+							<input type="hidden" name="review_no" value="${review.review_no }" />
+							<div class="form-field">
+								<input type="hidden" name="review_reply_mem_id" class="full-width" placeholder="작성자 ID" value="${authMember.person_id}" readonly="readonly" />
+							</div>
+
+							<nav aria-label="Page navigation" id="pagingArea"></nav>
+							<c:if test="${empty authMember.person_id }"> 
+                    		 	내용 : <textarea class="full-width" placeholder="로그인 후 이용하실 수 있습니다." readonly="readonly"></textarea>
+                    		 </c:if>
+                    		 <c:if test="${not empty authMember.person_id }">
+                    		 	<h4>댓글</h4> <textarea name="review_reply_content" class="full-width" placeholder="작성내용을 입력하세요."></textarea>
+								<input type="submit" value="등록"
+									class="submit btn--primary btn--large full-width" />
+                    		 </c:if>
 						</fieldset>
 					</form>
 				</div>
-	    	</div>
+			</div>
 		</div>
 	</div>
-
-	<table class="table">
-		<tr>
-			<td colspan="2">
-				
-			</td>
-		</tr>
-	</table>
-	
 </section>
-	
+   
 
 <!-- Modal -->
 
 
-<div class="modal fade" id="replyDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="replyUpdateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-          <span aria-hidden="true">삭제하시려면 비밀번호를 입력하세요 :</span>
+          <span aria-hidden="true">댓글수정</span>
       </div>
       <div class="modal-reviewdy">
-      	<form onsubmit="return false;" id="modalForm">
-      		<input type="hidden" id="review_no" value="${review.review_no }"/>
-      		<input type="hidden" id="review_reply_mem_id"/>
-      		<input type="hidden" id="review_reply_no" />
-        	<input type="text" id="review_reply_pass" />
-        </form>	
+         <form onsubmit="return false;" id="modalForm">
+            <input type="hidden" id="review_reply_no" />
+            <textarea id="reply_content" rows="10" cols="40" placeholder="댓글을 입력해주세요"></textarea>
+        </form>   
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="modalUpdBtn">수정</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-primary" id="modalBtn">삭제</button>
       </div>
     </div>
   </div>
@@ -158,10 +197,10 @@
 
 <script type="text/javascript">
 function paging(page){
-	pagingReply(page, ${review.review_no});
-	}
+   pagingReply(page, ${review.review_no});
+}
+paging(1);
 </script> 
-
 
 
 

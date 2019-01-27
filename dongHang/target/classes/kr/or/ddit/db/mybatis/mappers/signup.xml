@@ -130,4 +130,17 @@
 		MEM_DELETE = 'Y'
 		WHERE MEM_ID = #{mem_id}
 	</delete>
+	
+	
+	<select id="insertCorporation" parameterType="CorporationVO">
+		INSERT INTO COMPANY (
+		    COMPANY_ID,
+		    COMPANY_BUSINESS_NO,
+		    COMPANY_APPLY
+		) VALUES (
+		    #{company_id}, #{company_business_no}, 'N'
+		);
+	</select>
+	
+	
 </mapper>

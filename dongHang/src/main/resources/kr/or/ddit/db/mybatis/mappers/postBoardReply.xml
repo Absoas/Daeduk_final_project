@@ -12,8 +12,10 @@
 			SELECT A.*, ROWNUM RNUM
 			FROM (
 				SELECT REVIEW_NO, REVIEW_REPLY_NO, REVIEW_REPLY_MEM_ID, REVIEW_REPLY_CONTENT, REVIEW_REPLY_DATE
-				FROM REVIEW_REPLY
+				,PERSON.PERSON_NAME review_reply_mem_name , PERSON.PER_IMG
+				FROM REVIEW_REPLY , PERSON
 				WHERE REVIEW_NO = #{searchVO.review_no}
+				AND REVIEW_REPLY_MEM_ID = PERSON.PERSON_ID
 				ORDER BY REVIEW_REPLY_NO DESC  )  A   ) B
 		WHERE RNUM BETWEEN #{startRow} AND #{endRow}		
 	</select>
@@ -34,6 +36,14 @@
 		FROM REVIEW_REPLY
 		WHERE REVIEW_REPLY_NO = #{review_reply_no}
 	</select>
+	<update id="updateReply" parameterType="review_replyVO" >
+		UPDATE REVIEW_REPLY
+		    SET
+		    REVIEW_REPLY_CONTENT = #{review_reply_content}
+		WHERE
+		    REVIEW_REPLY_NO = #{review_reply_no}
+	</update>
+	
 	<delete id="deleteReply" parameterType="long">
 		DELETE 
 		FROM REVIEW_REPLY

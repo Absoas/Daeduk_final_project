@@ -2,7 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
 <script type="text/javascript">
 
 
@@ -225,7 +226,10 @@
 		</tr>
 	</table>
 	<div>
-		
+		<c:if test="${empty authMember.person_id }">
+        	<textarea rows="5" cols="70" name="qnaboard_reply_content" placeholder="로그인 후 이용하실 수 있습니다." readonly="readonly"></textarea>
+        </c:if>
+        <c:if test="${not empty authMember.person_id }">
 		<form name="replyForm" method="post" action="<c:url value='/qnaboard/replyInsert.do' />">
 			<input type="hidden" name="qnaboard_no" value="${qnaboard.qnaboard_no }" />
 			<input type="hidden" name="qnaboard_reply_no"  />
@@ -238,6 +242,7 @@
 			<input type="button" value="등록" onclick="alert('기업회원만 댓글을 달수있습니다.')" />
 			</c:if>
 		</form>
+		</c:if>
 	</div>
 	<table>
 		<tbody id="listBody">
@@ -267,7 +272,7 @@
       <div class="modal-body">
          <form onsubmit="return false;" id="modalForm">
             <input type="hidden" id="reply_no" />
-           <textarea id="reply_content" rows="60" cols="50" placeholder="댓글을 입력해주세요"></textarea>
+           <textarea id="reply_content" rows="10" cols="50" placeholder="댓글을 입력해주세요"></textarea>
         </form>   
       </div>
       <div class="modal-footer">

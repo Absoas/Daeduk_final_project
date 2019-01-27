@@ -1,0 +1,35 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/customer-service.css">
+
+<section class="s-content">
+	<div class="div_h3">
+		<h3>고객센터</h3>
+	</div>
+	<div class="total_div">
+		<div class="th_comment">
+			<div class="th_div1">
+				<span class="span1">처음부터끝까지</span><br>
+				<br> <span class="span1"><strong>고객님의 여행</strong>을 챙겨드리겠습니다.</span>
+			</div>
+		</div>
+		<ul class="ul_div1">
+			<li style="margin-top: 50px;"><div class="far fa-comments fa-3x"></div></li>
+			<li><a class="icon-a">묻고답하기</a></li>
+		</ul>
+		<ul class="ul_div2">
+			<li style="margin-top: 50px;"><div class="fas fa-headset fa-3x"></div></li>
+			<li><a class="icon-a">공지사항</a></li>
+		</ul>
+		<ul class="ul_div2">
+			<li style="margin-top: 50px;"><div class="fas fa-question fa-3x"></div></li>
+			<li><a class="icon-a">건의사항</a></li>
+		</ul>
+		<ul class="ul_div2">
+			<li style="margin-top: 50px;"><div class="fas fa-clipboard-list fa-3x"></div></li>
+			<li><a class="icon-a">설문조사</a></li>
+		</ul>
+	</div>
+
+</section>

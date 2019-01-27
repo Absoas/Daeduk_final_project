@@ -1,0 +1,15 @@
+package kr.or.ddit.vo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TestHotelVO {
+	private Long book_no;
+	private Long hotel_id;
+	private String mem_id;
+	private Long use_room_cnt;
+}

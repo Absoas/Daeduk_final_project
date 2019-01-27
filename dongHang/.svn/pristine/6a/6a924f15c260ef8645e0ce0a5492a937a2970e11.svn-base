@@ -1,0 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<section class="s-content">
+	<div class="row masonry-wrap">
+<!-- 검색해야할것은 기업명만 나중에는 설문 참여 했을 때 포인트 지급 -->
+	
+	</div>
+</section>

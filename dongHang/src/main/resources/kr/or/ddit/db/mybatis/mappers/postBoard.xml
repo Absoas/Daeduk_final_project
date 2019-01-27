@@ -81,12 +81,7 @@
 		REVIEW_VIEW_COUNT = REVIEW_VIEW_COUNT + 1
 		WHERE REVIEW_NO = #{review_no}
 	</update>
-	<update id="incrementRcmd" parameterType="long">
-		UPDATE REVIEW
-		SET
-		REVIEW_RECOMMEND_COUNT = REVIEW_RECOMMEND_COUNT + 1
-		WHERE REVIEW_NO = #{review_no}
-	</update>
+	
 	
 	<update id="updateBoard" parameterType="reviewVO">
 		UPDATE REVIEW
@@ -119,20 +114,52 @@
 		DELETE FROM REVIEW WHERE REVIEW_NO = #{review_no}
 	</delete>
 	
+	<update id="incrementRcmd" parameterType="long">
+		UPDATE REVIEW
+		SET
+		REVIEW_RECOMMEND_COUNT = REVIEW_RECOMMEND_COUNT + 1
+		WHERE REVIEW_NO = #{review_no}
+	</update>
+	
+	<insert id = "insertPostRcmd" parameterType="map">
+		INSERT INTO BOARD_RCMD (
+			BOARD_NO, RCMD_MEM_ID, BOARD_TYPE
+		) VALUES (
+			#{review_no}, #{authMember}, 2
+		)
+	</insert>
+	
+	<select id = "selectPostRcmd" parameterType="map" resultType="int">
+		SELECT NVL(COUNT(*), 0) FROM BOARD_RCMD
+		WHERE BOARD_NO = #{review_no}
+		AND RCMD_MEM_ID = #{authMember}
+		AND BOARD_TYPE = 2
+	</select>
+	
+	<delete id="deletePostRcmd" parameterType="long">
+		DELETE FROM BOARD_RCMD
+		WHERE BOARD_NO = #{review_no}
+		AND BOARD_TYPE = 2
+	</delete>
+	
+	<select id = "selectPostReport" parameterType="map" resultType="int">
+		SELECT NVL(COUNT(*), 0) FROM BOARD_REPORT
+		WHERE BOARD_NO = #{review_no}
+		AND REPORT_MEM_ID = #{authMember}
+		AND BOARD_TYPE = 2
+	</select>
+	
+	<insert id = "insertPostReport" parameterType="map">
+		<selectKey resultType = "long" keyProperty="report_no" order = "BEFORE">
+         SELECT BOARD_REPORT_SEQ.NEXTVAL FROM DUAL
+      	</selectKey>
+	      INSERT INTO BOARD_REPORT(
+	         REPORT_NO, BOARD_NO, REPORT_MEM_ID,
+	         BOARD_TYPE
+	      )VALUES(
+	         #{report_no}, #{review_no}, #{authMember},
+	         2
+	      )
+	</insert>
 	
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

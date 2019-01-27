@@ -1,0 +1,234 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<script>
+$(function(){
+	dataListArrive = [];
+	dataListDept = [];
+	tBodyList = $("#tBodyList");
+	tBodyList2 = $("#tBodyList2");
+	getAirport();
+});
+
+function airInfoList(resp,searchType){
+	
+
+	if(searchType == 'dep'){
+// 		console.log(searchType);
+		dataListDept.push(resp.data);
+	}else{
+// 		console.log(searchType);
+		dataListArrive.push(resp.data);
+	}
+	
+// 	console.log(dataListArrive);
+// 	console.log(dataListDept);
+	
+// 	var dataList = resp.data;
+	
+}
+
+
+
+
+function customSort(a, b) {
+	var c = parseInt(a.depTime); 
+	var d = parseInt(b.depTime); 
+	
+	if (c == d) {
+		return 0
+	}
+	return c > d ? 1 : -1;
+}
+
+function getAirport() {
+// 	var array = ["KE","OZ","7C","LJ","TW","ZE","BX"];
+	var array = ["KE","OZ"];
+	
+
+	
+	$.each(array, function(idx,airLine){
+		$.each(array, function(idx2,domestic_airline){
+			if(airLine == domestic_airline){
+				console.log("중복");
+			}else{
+				$.ajax({
+					url : "${pageContext.request.contextPath}/traffic/airDept.do",
+					method : 'post',
+					dataType : "json",
+					data : {
+						searchType : "dep",
+						airline : airLine,
+						domestic_round_way : "RT",
+						domestic_start : "RSU",
+						domestic_end : "CJU",
+						domestic_startDate : "2019.01.24",
+						domestic_endDate : "2019.01.25",
+						domestic_ea_adult : "1",
+						domestic_ea_children : "0",
+						domestic_ea_infant : "0",
+						domestic_seat : "A",
+						domestic_airline : domestic_airline
+					},
+					
+					success : function(resp) {
+						dataListDept.push(resp.data);
+					
+						if(array.length*array.length == count){
+							totalDeptReservation(dataListDept);
+						}
+						
+						
+					},
+					
+					error : function(resp) {
+						console.log(resp.status);
+					}
+					
+				});
+			}
+		});
+		
+	});
+	
+	var count = 0;
+	
+	$.each(array, function(idx,airLine){
+		$.each(array, function(idx2,domestic_airline){
+			count++;
+			if(airLine == domestic_airline){
+				console.log("중복");
+			}else{
+				$.ajax({
+					url : "${pageContext.request.contextPath}/traffic/airArrive.do",
+					method : 'post',
+					dataType : "json",
+					data : {
+						searchType : "arr",
+						airline : airLine,
+						domestic_round_way : "RT",
+						domestic_start : "RSU",
+						domestic_end : "CJU",
+						domestic_startDate : "2019.01.24",
+						domestic_endDate : "2019.01.25",
+						domestic_ea_adult : "1",
+						domestic_ea_children : "0",
+						domestic_ea_infant : "0",
+						domestic_seat : "A",
+						domestic_airline : domestic_airline
+					},
+					
+					success : function(resp) {
+						dataListArrive.push(resp.data);
+						
+						if(array.length*array.length == count){
+							totalArriveReservation(dataListArrive);
+						}
+					},
+					
+					error : function(resp) {
+						console.log(resp.status);
+					}
+				});
+			}
+		});
+	});
+}
+
+function totalDeptReservation(array){
+	var depthtml = "";
+	array.sort(customSort);
+	
+	console.log(array);
+	
+	$.each(array,function(idx,temp){
+		$.each(temp,function(idx,tmp){
+			var charge =  parseInt(tmp.fare) + parseInt(tmp.airTax) + parseInt(tmp.fuelChg);
+			depthtml += "<tr>";
+			depthtml += "<td style='display:none;'>"+tmp.code+"</td>";
+			depthtml += "<td>"+tmp.carDesc+"</td>";
+			depthtml += "<td>"+tmp.depTime+"</td>";
+			depthtml += "<td>"+tmp.arrTime+"</td>";
+			depthtml += "<td>"+tmp.classDesc+"</td>";
+			depthtml += "<td>"+charge+"</td>";
+			depthtml += "<td>"+tmp.seat+"석</td>";
+			depthtml += "</tr>";
+		});
+	});
+	tBodyList.html(depthtml);
+	
+}
+function totalArriveReservation(array){
+	var html = "";
+	array.sort(customSort);
+	
+// 	console.log(array);
+	
+	$.each(array,function(idx,temp){
+		$.each(temp,function(idx,tmp){
+			var charge =  parseInt(tmp.fare) + parseInt(tmp.airTax) + parseInt(tmp.fuelChg);
+			html += "<tr>";
+			html += "<td style='display:none;'>"+tmp.code+"</td>";
+			html += "<td>"+tmp.carDesc+"</td>";
+			html += "<td>"+tmp.depTime+"</td>";
+			html += "<td>"+tmp.arrTime+"</td>";
+			html += "<td>"+tmp.classDesc+"</td>";
+			html += "<td>"+charge+"</td>";
+			html += "<td>"+tmp.seat+"석</td>";
+			html += "</tr>";
+		});
+	});
+	
+	tBodyList2.html(html);
+}
+</script>
+
+<section class="s-content">
+	<div class="row masonry-wrap">
+		
+		<select id="">
+		  <option value="volvo">Volvo</option>
+		  <option value="saab">Saab</option>
+		  <option value="mercedes">Mercedes</option>
+		  <option value="audi">Audi</option>
+		</select>
+	
+		
+		<div style="display: inline-block;">
+		<table class="table" style="float: left; width: 48%">
+			<thead>
+				<tr>
+					<td>항공편</td>
+					<td>출발일시</td>
+					<td>도착일시</td>
+					<td>좌석</td>
+					<td>기준요금</td>
+					<td>좌석수</td>
+				</tr>
+			</thead>
+			
+			<tbody id="tBodyList">
+				
+			</tbody>
+		</table>
+		
+		<table class="table"  style="float: right; width: 48%">
+			<thead>
+				<tr>
+					<td>항공편</td>
+					<td>출발일시</td>
+					<td>도착일시</td>
+					<td>좌석</td>
+					<td>기준요금</td>
+					<td>좌석수</td>
+				</tr>
+			</thead>
+			
+			<tbody id="tBodyList2">
+				
+			</tbody>
+		</table>
+	</div>
+		
+	</div>
+</section>

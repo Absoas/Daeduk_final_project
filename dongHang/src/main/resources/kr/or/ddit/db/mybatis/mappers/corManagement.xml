@@ -15,6 +15,7 @@
 		SELECT NVL(COUNT(*), 0)
 		FROM COMPANY A, PERSON B
 		WHERE A.COMPANY_ID = B.PERSON_ID
+		AND A.COMPANY_APPLY = 'Y'
 		<include refid="searchFrag"></include>
 	</select>
 	
@@ -40,6 +41,7 @@
 				    B.PERSON_NAME
 				FROM COMPANY A, PERSON B
                 WHERE A.COMPANY_ID = B.PERSON_ID
+                AND A.COMPANY_APPLY = 'Y'
                 <include refid="searchFrag"></include>
 				ORDER BY A.COMPANY_ID ) A ) B
 		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
@@ -48,6 +50,7 @@
 		SELECT
 		    A.COMPANY_ID,
 		    A.COMPANY_BUSINESS_NO,
+		    A.COMPANY_APPLY,
 		    B.PERSON_ZIP,
 		    B.PERSON_ADDR1,
 		    B.PERSON_ADDR2,
@@ -56,6 +59,7 @@
 		    B.PERSON_NAME
 		FROM COMPANY A, PERSON B
         WHERE A.COMPANY_ID = B.PERSON_ID
+        AND A.COMPANY_APPLY = 'Y'
         AND A.COMPANY_ID = #{company_id}
 	</select>
 	

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 <script type="text/javascript">
@@ -55,52 +55,59 @@ $(function(){
 	
 })
 
-</script>
+</script> 
 
 
-<div id="page-wrapper">
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="panel panel-default">
-				<div class="panel-heading">DataTables Advanced Tables</div>
-				<!-- /.panel-heading -->
-				<div class="panel-body">
-					<table class="table table-striped table-bordered table-hover">
-						<thead>
-							<tr>
-								<th>순번</th>
-								<th>질문번호</th>
-								<th>질문내용</th>
-								<th>참여인원</th>
-								<th>평균평점</th>
-							</tr>
-						</thead>
-						<tbody id="bodylist">
-
-							<c:choose>
-								<c:when test="${not empty pagingVO.dataList }">
-									<c:forEach items="${pagingVO.dataList }" var="survey">
-										<tr>
-											<td>${survey.rnum }</td>
-											<td>${survey.evaluation_no }</td>
-											<td>${survey.evaluation_content}</td>
-											<td>${survey.evaluation_count }</td>
-											<td>${survey.evaluation_point }</td>
-										</tr>
-									</c:forEach>
-								</c:when>
-								<c:otherwise>
-									<tr>
-										<td colspan="7">검색 조건에 맞는 글이 없음.</td>
-									</tr>
-								</c:otherwise>
-							</c:choose>
-						</tbody>
-
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
+<div id="wrapper">
+        <div id="page-wrapper">
+<table border='1'>
+	<thead>
+		<tr>
+			<th>순번</th>
+			<th>질문번호</th>
+			<th>질문내용</th>
+			<th>참여인원</th>
+			<th>평균평점</th>
+		</tr>
+	</thead>
+	<tbody id="bodylist">
+	
+		<c:choose>
+			<c:when test="${not empty pagingVO.dataList }">
+				<c:forEach items="${pagingVO.dataList }" var="survey">
+					<tr>
+						<td>${survey.rnum }</td>
+						<td>${survey.evaluation_no }</td>
+						<td>${survey.evaluation_content}</td>
+						<td>${survey.evaluation_count }</td>
+						<td>${survey.evaluation_point }</td>
+					</tr>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<tr>
+					<td colspan="7">검색 조건에 맞는 글이 없음.</td>
+				</tr>
+			</c:otherwise>
+		</c:choose>
+	</tbody>
+	
+	<tfoot>
+		<tr>
+			<td colspan="7" class="text-center">
+				<nav aria-label="Page navigation" id="navtag">
+				 	${pagingVO.pagingHTML } 
+				</nav>
+				
+				<form action="<c:url value="/survey/surveyView.do"/>" name="searchForm" class="form-inline justify-content-center">
+					<input type="hidden" name="page" />
+					<input type="hidden" name="what" value="${pagingVO.number}" />
+				</form>
+			</td>
+		</tr>
+	</tfoot>
+</table>
 </div>
-
+</div>
+	
+    

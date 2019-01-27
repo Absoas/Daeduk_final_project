@@ -23,15 +23,15 @@
    <sql id = "searchFrag2">
       <if test="searchVO != null">
          <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchVO.mem_id)">
-            AND MEM_ID LIKE '%'||#{searchVO.mem_id}||'%'
+            AND m.MEM_ID LIKE '%'||#{searchVO.mem_id}||'%'
          </if>
          <if
             test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchVO.board_title)">
-            AND BOARD_TITLE LIKE '%'||#{searchVO.board_title}||'%'
+            AND b.BOARD_TITLE LIKE '%'||#{searchVO.board_title}||'%'
          </if>
          <if
             test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchVO.board_content)">
-            AND BOARD_CONTENT LIKE '%'||#{searchVO.board_content}||'%'
+            AND b.BOARD_CONTENT LIKE '%'||#{searchVO.board_content}||'%'
          </if>
       </if>
    </sql>
@@ -53,8 +53,8 @@
           SELECT ROWNUM RNUM, A.*
           FROM (
               SELECT b.BOARD_NO, 
-                    b.BOARD_TITLE,
-                    p.PERSON_NAME,  p.PERSON_ID,    b.BOARD_DATE, 
+                    b.BOARD_TITLE, 
+                    p.PERSON_NAME,  m.MEM_ID,    b.BOARD_DATE, 
                       b.BOARD_VIEW_COUNT, b.BOARD_RECOMMEND_COUNT
               FROM BOARD b,PERSON p,MEMBER m
               WHERE b.MEM_ID = m.MEM_ID
@@ -139,9 +139,9 @@
 	
 	<insert id = "insertFreeRcmd" parameterType="map">
 		INSERT INTO BOARD_RCMD (
-			BOARD_NO, RCMD_MEM_ID
+			BOARD_NO, RCMD_MEM_ID, BOARD_TYPE
 		) VALUES (
-			#{filterData.board_no}, #{filterData.authMembmer}
+			#{filterData.board_no}, #{filterData.authMembmer}, 1
 		)
 	</insert>
 	
@@ -149,10 +149,32 @@
 		SELECT NVL(COUNT(*), 0) FROM BOARD_RCMD
 		WHERE BOARD_NO = #{filterData.board_no}
 		AND RCMD_MEM_ID = #{filterData.authMembmer}
+		AND BOARD_TYPE = 1
 	</select>
 	
 	<delete id="deleteFreeRcmd" parameterType="long">
 		DELETE FROM BOARD_RCMD
 		WHERE BOARD_NO = #{board_no}
+		AND BOARD_TYPE = 1
 	</delete>
+	
+	<select id = "selectFreeReport" parameterType="map" resultType="int">
+		SELECT NVL(COUNT(*), 0) FROM BOARD_REPORT
+		WHERE BOARD_NO = #{board_no}
+		AND REPORT_MEM_ID = #{authMember}
+		AND BOARD_TYPE = 1
+	</select>
+	
+	<insert id = "insertFreeReport" parameterType="map">
+		<selectKey resultType = "long" keyProperty="report_no" order = "BEFORE">
+         SELECT BOARD_REPORT_SEQ.NEXTVAL FROM DUAL
+      	</selectKey>
+	      INSERT INTO BOARD_REPORT(
+	         REPORT_NO, BOARD_NO, REPORT_MEM_ID,
+	         BOARD_TYPE
+	      )VALUES(
+	         #{report_no}, #{board_no}, #{authMember},
+	         1
+	      )
+	</insert>
 </mapper>
